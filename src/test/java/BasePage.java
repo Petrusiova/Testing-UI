@@ -10,7 +10,7 @@ public class BasePage extends PropertyManager{
     }
 
     public ChromeDriver getChromeDriver(){
-        initWebDriver();
+//        initWebDriver();
         return chromeDriver;
     }
 
