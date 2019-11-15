@@ -1,8 +1,6 @@
 import io.qameta.allure.Step;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import io.qameta.allure.Stories;
+import org.junit.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 
 public class YandexSearchTest extends BasePage {
