@@ -1,20 +1,28 @@
 import io.qameta.allure.Step;
-import io.qameta.allure.Stories;
-import org.junit.*;
-import org.openqa.selenium.WebElement;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Test;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import pages.BasePage;
+import pages.YandexMarketPage;
 
 public class YandexSearchTest extends BasePage {
     ChromeDriver chromeDriver = getChromeDriver();
 
-//    @Before
-//    public void init() {
-//
-//    }
 
     @Test
     public void open() {
         chromeDriver.get("http://www.yandex.ru");
+        driverStatus();
+        searchInYandex();
+    }
+
+    public void searchInYandex(){
+        YandexMarketPage page = new YandexMarketPage(chromeDriver);
+        page.setSearch("Yandex market");
+        driverStatus();
+        page.redirectToMarket();
         driverStatus();
     }
 

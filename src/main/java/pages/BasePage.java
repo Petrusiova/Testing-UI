@@ -1,4 +1,7 @@
+package pages;
+
 import org.openqa.selenium.chrome.ChromeDriver;
+import util.PropertyManager;
 
 import java.io.File;
 
