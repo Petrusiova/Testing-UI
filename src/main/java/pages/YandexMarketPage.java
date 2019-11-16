@@ -16,7 +16,8 @@ public class YandexMarketPage extends BasePage {
     private By pointButton = By.linkText("Маркет");
     private By answerNo = By.xpath("//div[2]/div[2]/span");
     private By region = By.xpath("//div[1]/span/input");
-    private By continueBtn = By.linkText("Продолжить с новым регионом");
+    private By spb = By.xpath("//*[contains(text(),\"Санкт-Петербург\")]");
+    private By continueBtn = By.xpath("//*[contains(text(),\"Продолжить с новым регионом\")]");
 
     public YandexMarketPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -48,7 +49,8 @@ public class YandexMarketPage extends BasePage {
         region.clear();
         region.sendKeys(city);
         region.click();
-        region.sendKeys(Keys.DOWN, Keys.ENTER);
-        region.sendKeys(Keys.ENTER);
+        region.click();
+        webDriver.findElement(spb).click();
+        webDriver.findElement(continueBtn).click();
     }
 }
