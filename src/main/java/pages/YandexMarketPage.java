@@ -51,6 +51,5 @@ public class YandexMarketPage extends BasePage {
         region.click();
         region.click();
         webDriver.findElement(spb).click();
-        webDriver.findElement(continueBtn).click();
     }
 }
