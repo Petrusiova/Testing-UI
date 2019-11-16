@@ -16,6 +16,7 @@ public class YandexSearchTest extends BasePage {
         page.setSearch("яндекс маркет");
         page.redirectToMarket();
         driverStatus(chromeDriver);
+        page.switchCity("сан");
     }
 
     @Step
