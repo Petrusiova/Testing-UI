@@ -52,10 +52,16 @@ public class YandexMarketPage extends BasePage {
         webDriver.switchTo().window(tabs2.get(1));
     }
 
-    public void switchCity(String city) {
+    public void anotherCity() {
         answerNo.click();
+    }
+
+    public void changeCity(String city){
         region.clear();
         region.sendKeys(city);
+    }
+
+    public void choseSpb(){
         try {
             spb.click();
         } catch (NoSuchElementException e) {

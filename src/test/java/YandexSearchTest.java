@@ -1,7 +1,4 @@
-import io.qameta.allure.Step;
 import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -16,15 +13,16 @@ public class YandexSearchTest extends YandexSearchSteps {
     @Test
     public void open() {
         checkStartPage(page, chromeDriver);
-        checkMarketPage(page.setSearch("яндекс маркет"), chromeDriver);
+        page.setSearch("яндекс маркет");
+        checkSearchMarketPage(chromeDriver);
         page.redirectToMarket();
-//        driverStatus(chromeDriver);
-        page.switchCity("сан");
-    }
+        checkMarketPage(chromeDriver);
+        page.anotherCity();
+        checkAnotherCity(chromeDriver);
+        page.changeCity("сан");
+        page.choseSpb();
+        checkSpbPage(chromeDriver);
 
-    @Step
-    public void driverStatus(ChromeDriver driver, YandexMarketPage page) {
-        Assert.assertTrue(driver.getCurrentUrl().contains("market.yandex.ru"));
     }
 
     @After
