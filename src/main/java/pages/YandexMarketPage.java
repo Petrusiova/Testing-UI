@@ -7,10 +7,11 @@ public class YandexMarketPage extends BasePage {
     private WebDriver webDriver;
     private By resultStats = By.id("text");
     private By searchButton = By.className("search2__button");
-    private By pointButton = By.linkText("market.yandex.ru");
+    private By pointButton = By.linkText("Маркет");
 
     public YandexMarketPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
+        webDriver.get("http://www.yandex.ru");
     }
 
     public YandexMarketPage setSearch(String market) {

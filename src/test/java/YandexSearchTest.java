@@ -12,17 +12,10 @@ public class YandexSearchTest extends BasePage {
 
     @Test
     public void open() {
-        chromeDriver.get("http://www.yandex.ru");
-        driverStatus();
-        searchInYandex();
-    }
-
-    public void searchInYandex(){
         YandexMarketPage page = new YandexMarketPage(chromeDriver);
-        page.setSearch("Yandex market");
+        page.setSearch("яндекс маркет");
         page.redirectToMarket();
-        Assert.assertEquals("", "arket.yandex.ru", chromeDriver.getCurrentUrl());
-
+        String link = chromeDriver.getPageSource();
     }
 
     @Step
@@ -33,6 +26,7 @@ public class YandexSearchTest extends BasePage {
     @After
     public void closeBrowser(){
         chromeDriver.close();
+        chromeDriver.quit();
     }
 
 
