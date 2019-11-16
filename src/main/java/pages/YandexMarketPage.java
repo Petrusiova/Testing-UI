@@ -1,18 +1,36 @@
 package pages;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.NoSuchElementException;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 
 public class YandexMarketPage extends BasePage {
     private WebDriver webDriver;
-    private By resultStats = By.id("text");
-    private By searchButton = By.className("search2__button");
-    private By pointButton = By.linkText("Маркет");
-    private By answerNo = By.xpath("//div[2]/div[2]/span");
-    private By region = By.xpath("//div[1]/span/input");
-    private By spb = By.xpath("//*[contains(text(),'Санкт-Петербург')]");
-    private By continueBtn = By.xpath("//*[contains(text(),'Продолжить с новым регионом')]");
+
+    @FindBy(id = "text")
+    private WebElement resultStats;
+
+    @FindBy(className = "search2__button")
+    private WebElement searchButton;
+
+    @FindBy(linkText = "Маркет")
+    private WebElement pointButton;
+
+    @FindBy(xpath = "//div[2]/div[2]/span")
+    private WebElement answerNo;
+
+    @FindBy(xpath = "//div[1]/span/input")
+    private WebElement region;
+
+    @FindBy(xpath = "//*[contains(text(),'Санкт-Петербург')]")
+    private WebElement spb;
+
+    @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
+    private WebElement continueBtn;
 
     public YandexMarketPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
@@ -20,18 +38,14 @@ public class YandexMarketPage extends BasePage {
     }
 
     public YandexMarketPage setSearch(String market) {
-        webDriver.findElement(resultStats).clear();
-        webDriver.findElement(resultStats).sendKeys(market);
-        startSearch();
+        resultStats.clear();
+        resultStats.sendKeys(market);
+        searchButton.click();
         return this;
     }
 
-    public void startSearch() {
-        webDriver.findElement(searchButton).click();
-    }
-
     public void redirectToMarket() {
-        webDriver.findElement(pointButton).click();
+        pointButton.click();
         ArrayList<String> tabs2 = new ArrayList<>(webDriver.getWindowHandles());
         webDriver.switchTo().window(tabs2.get(0));
         webDriver.close();
@@ -39,15 +53,14 @@ public class YandexMarketPage extends BasePage {
     }
 
     public void switchCity(String city) {
-        webDriver.findElement(answerNo).click();
-        WebElement region = webDriver.findElement(this.region);
+        answerNo.click();
         region.clear();
         region.sendKeys(city);
         try {
-            webDriver.findElement(spb).click();
+            spb.click();
         } catch (NoSuchElementException e) {
             region.click();
-            webDriver.findElement(spb).click();
+            spb.click();
         }
         region.sendKeys(Keys.ENTER);
     }
