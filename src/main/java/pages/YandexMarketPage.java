@@ -7,13 +7,13 @@ public class YandexMarketPage extends BasePage {
     private WebDriver webDriver;
     private By resultStats = By.id("text");
     private By searchButton = By.className("search2__button");
-    private By pointButton = By.className("organic__url-text");
+    private By pointButton = By.linkText("market.yandex.ru");
 
     public YandexMarketPage(final WebDriver webDriver) {
         this.webDriver = webDriver;
     }
 
-    public YandexMarketPage setSearch(String market){
+    public YandexMarketPage setSearch(String market) {
         webDriver.findElement(resultStats).clear();
         webDriver.findElement(resultStats).sendKeys(market);
         startSearch();
@@ -24,7 +24,7 @@ public class YandexMarketPage extends BasePage {
         webDriver.findElement(searchButton).click();
     }
 
-    public void redirectToMarket(){
+    public void redirectToMarket() {
         webDriver.findElement(pointButton).click();
     }
 }
