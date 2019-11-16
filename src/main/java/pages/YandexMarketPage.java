@@ -3,6 +3,8 @@ package pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.util.ArrayList;
+
 public class YandexMarketPage extends BasePage {
     private WebDriver webDriver;
     private By resultStats = By.id("text");
@@ -27,5 +29,9 @@ public class YandexMarketPage extends BasePage {
 
     public void redirectToMarket() {
         webDriver.findElement(pointButton).click();
+        ArrayList<String> tabs2 = new ArrayList<>(webDriver.getWindowHandles());
+        webDriver.switchTo().window(tabs2.get(0));
+        webDriver.close();
+        webDriver.switchTo().window(tabs2.get(1));
     }
 }

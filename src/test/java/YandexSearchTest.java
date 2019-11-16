@@ -15,12 +15,12 @@ public class YandexSearchTest extends BasePage {
         YandexMarketPage page = new YandexMarketPage(chromeDriver);
         page.setSearch("яндекс маркет");
         page.redirectToMarket();
-        String link = chromeDriver.getPageSource();
+        driverStatus(chromeDriver);
     }
 
     @Step
-    public void driverStatus(){
-        Assert.assertFalse(chromeDriver.getCurrentUrl().isEmpty());
+    public void driverStatus(ChromeDriver driver){
+        Assert.assertTrue(driver.getCurrentUrl().contains("market.yandex.ru"));
     }
 
     @After
