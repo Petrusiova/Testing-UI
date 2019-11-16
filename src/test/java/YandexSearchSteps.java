@@ -1,10 +1,10 @@
 import io.qameta.allure.Step;
 import org.junit.Assert;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.FindBy;
 import pages.BasePage;
 import pages.YandexMarketPage;
+
+import java.util.concurrent.TimeUnit;
 
 public class YandexSearchSteps extends BasePage {
 
@@ -49,6 +49,11 @@ public class YandexSearchSteps extends BasePage {
 
     @Step("Проверяем открылась ли страница Яндекс.Маркет")
     public void checkSpbPage(ChromeDriver chromeDriver) {
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         Assert.assertTrue("При выборе региона Санкт-Петербург не произошел корректный переход",
                 chromeDriver.findElementsByXPath("//*[contains(text(),'Санкт-Петербург')]").size() > 0);
     }
