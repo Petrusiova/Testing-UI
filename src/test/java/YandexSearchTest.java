@@ -24,13 +24,9 @@ public class YandexSearchTest extends YandexSearchSteps {
         page.anotherCity();
         checkAnotherCity(chromeDriver);
         page.changeCity("сан");
-        try {
-            Thread.sleep(5000);
-            page.choseSpb();
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        chromeDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        page.choseSpb();
+        chromeDriver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
         checkSpbPage(chromeDriver);
 
     }
