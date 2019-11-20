@@ -1,11 +1,12 @@
 package pages;
 
+import org.junit.After;
 import org.openqa.selenium.chrome.ChromeDriver;
 import util.PropertyManager;
 
 import java.io.File;
 
-public class BasePage extends PropertyManager {
+public class BasePage {
     private static ChromeDriver chromeDriver;
 
     public BasePage() {
@@ -21,6 +22,15 @@ public class BasePage extends PropertyManager {
             File chromeDriverFile = new File(PropertyManager.getInstance().getDriverPath());
             System.setProperty("webdriver.chrome.driver", chromeDriverFile.getAbsolutePath());
             chromeDriver = new ChromeDriver();
+        }
+    }
+
+
+    @After
+    public void closeBrowser() {
+        if (chromeDriver != null) {
+            chromeDriver.close();
+            chromeDriver.quit();
         }
     }
 }

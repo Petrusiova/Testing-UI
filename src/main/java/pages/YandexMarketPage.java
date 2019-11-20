@@ -1,24 +1,15 @@
 package pages;
 
+import io.qameta.allure.Step;
+import org.junit.Assert;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
-
 public class YandexMarketPage extends BasePage {
     private WebDriver webDriver;
-
-    @FindBy(id = "text")
-    private WebElement resultStats;
-
-    @FindBy(className = "search2__button")
-    private WebElement searchButton;
-
-    @FindBy(linkText = "Маркет")
-    private WebElement pointButton;
 
     @FindBy(xpath = "//div[2]/div[2]/span")
     private WebElement answerNo;
@@ -32,26 +23,8 @@ public class YandexMarketPage extends BasePage {
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
     private WebElement continueBtn;
 
-    public YandexMarketPage(final WebDriver webDriver) {
-        this.webDriver = webDriver;
-        webDriver.get("http://www.yandex.ru");
-    }
 
-    public YandexMarketPage setSearch(String market) {
-        resultStats.clear();
-        resultStats.sendKeys(market);
-        searchButton.click();
-        return this;
-    }
-
-    public void redirectToMarket() {
-        pointButton.click();
-        ArrayList<String> tabs2 = new ArrayList<>(webDriver.getWindowHandles());
-        webDriver.switchTo().window(tabs2.get(0));
-        webDriver.close();
-        webDriver.switchTo().window(tabs2.get(1));
-    }
-
+    //добавить аннотации + проверки
     public void anotherCity() {
         answerNo.click();
     }
@@ -70,4 +43,37 @@ public class YandexMarketPage extends BasePage {
         }
         region.sendKeys(Keys.ENTER);
     }
+
+    @Step("Проверяем открылась ли страница Яндекс.Маркет")
+    public void checkSearchMarketPage() {
+        Assert.assertTrue("Не был произведен поиск по ключу 'Яндекс маркет'",
+                getChromeDriver().getTitle().startsWith("Яндекс маркет"));
+        Assert.assertTrue("В поисковой выдаче не найден Яндекс Маркет",
+                getChromeDriver().findElementByLinkText("Маркет").isDisplayed());
+    }
+
+    @Step("Проверяем открылась ли страница Яндекс.Маркет")
+    public void checkMarketPage() {
+        Assert.assertTrue("Не произошел переход на стартовую станицу Яндекс Маркета",
+                getChromeDriver().getCurrentUrl().startsWith("https://market.yandex.ru"));
+        Assert.assertTrue("Не найдено всплывающее окно с вопросом о регионе",
+                getChromeDriver().findElementByXPath("//*[@class='n-region-notification__header']").isDisplayed());
+        Assert.assertTrue("Не найдена кнопка выбора другого региона",
+                getChromeDriver().findElementByXPath("//*[contains(text(), 'Нет, другой')]").isDisplayed());
+    }
+
+    @Step("Проверяем открылась ли страница Яндекс.Маркет")
+    public void checkAnotherCity() {
+        Assert.assertTrue("Не найдено всплывающее окно выбора другого региона",
+                getChromeDriver().findElementByXPath("//*[@class='header2-region-popup']").isDisplayed());
+        Assert.assertTrue("Не найдено поле ввода региона",
+                getChromeDriver().findElementByXPath("//div[1]/span/input").isDisplayed());
+    }
+
+    @Step("Проверяем открылась ли страница Яндекс.Маркет")
+    public void checkSpbPage() {
+        Assert.assertTrue("При выборе региона Санкт-Петербург не произошел корректный переход",
+                getChromeDriver().findElementsByXPath("//*[contains(text(),'Санкт-Петербург')]").size() > 0);
+    }
+
 }
