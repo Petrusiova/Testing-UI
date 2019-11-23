@@ -90,6 +90,12 @@
             <artifactId>aspectjweaver</artifactId>
             <version>${aspectj.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-chrome-driver</artifactId>
+            <version>3.14.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 
