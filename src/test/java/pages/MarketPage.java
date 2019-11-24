@@ -31,7 +31,7 @@ public class MarketPage extends BasePage {
     }
 
     public void changeCity(String city){
-        Assert.assertTrue("Не найдено поле для ввода региона", answerNo.isDisplayed());
+        Assert.assertTrue("Не найдено поле для ввода региона", region.isDisplayed());
         region.clear();
         region.sendKeys(city);
     }
