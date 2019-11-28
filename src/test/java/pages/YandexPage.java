@@ -1,15 +1,14 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.junit.Assert;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 
 import java.util.ArrayList;
 
-public class YandexPage extends BasePage {
-    private WebDriver webDriver;
+public class YandexPage extends BasePage{
 
     @FindBy(id = "text")
     private WebElement resultStats;
@@ -20,12 +19,8 @@ public class YandexPage extends BasePage {
     @FindBy(linkText = "Маркет")
     private WebElement pointButton;
 
-    public YandexPage() {
-        PageFactory.initElements(getChromeDriver(), this);
-        this.webDriver = getChromeDriver();
-        webDriver.get("http://yandex.ru");
-    }
 
+    @Step("Устанавливаем значение {0} для поиска")
     public YandexPage setSearch(String market) {
         Assert.assertTrue("Не найдена строка для вводка запроса для поиска", resultStats.isDisplayed());
         resultStats.clear();
@@ -35,14 +30,24 @@ public class YandexPage extends BasePage {
     }
 
     public void redirectToMarket() {
+        ChromeDriver driver = getChromeDriver();
         Assert.assertTrue("Среди поисковой выдачи нет страницы Яндекс Маркета", pointButton.isDisplayed());
         pointButton.click();
-        ArrayList<String> tabs = new ArrayList<>(webDriver.getWindowHandles());
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
         Assert.assertEquals("Страница Яндекс Маркета не открылась в новом окне", 2, tabs.size());
-        webDriver.switchTo().window(tabs.get(0));
-        webDriver.close();
-        webDriver.switchTo().window(tabs.get(1));
+        driver.switchTo().window(tabs.get(0));
+        driver.close();
+        driver.switchTo().window(tabs.get(1));
         Assert.assertEquals("Закрытие предыдущей страницы не произошло",
-                1, webDriver.getWindowHandles().size());
+                1, driver.getWindowHandles().size());
+    }
+
+    @Step("Проверяем открылась ли страница Яндекса") //////
+    public void checkStartPage() {
+//        Assert.assertEquals("Заголовок страницы не соответствует ожидаемому",
+//                "yandex.ru", getChromeDriver().getTitle());
+        String currentUrl = getChromeDriver().getCurrentUrl();
+        Assert.assertTrue("Переход на стартовую страницу Яндекса не был выполнен",
+                currentUrl.startsWith("https://yandex.ru") || currentUrl.startsWith("https://www.yandex.ru"));
     }
 }
