@@ -7,11 +7,11 @@ public class YandexSearchSteps extends BasePage {
 
 
     @Step("ќткрываем страницу яндекса")
-    public void openYandexAndCheck() {
+    public void openPageRedirectAndCheck(String goTo, String search) {
         YandexPage page = new YandexPage();
-        goTo("http://yandex.ru");
+        goTo(goTo);
         page.checkStartPage();
-        page.setSearch("яндекс маркет");
+        page.setSearch(search);
         page.redirectToMarket();
     }
 

@@ -44,8 +44,6 @@ public class YandexPage extends BasePage{
 
     @Step("ѕровер€ем открылась ли страница яндекса") //////
     public void checkStartPage() {
-//        Assert.assertEquals("«аголовок страницы не соответствует ожидаемому",
-//                "yandex.ru", getChromeDriver().getTitle());
         String currentUrl = getChromeDriver().getCurrentUrl();
         Assert.assertTrue("ѕереход на стартовую страницу яндекса не был выполнен",
                 currentUrl.startsWith("https://yandex.ru") || currentUrl.startsWith("https://www.yandex.ru"));

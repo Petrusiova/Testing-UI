@@ -6,7 +6,7 @@ public class YandexSearchTest extends YandexSearchSteps {
     @Test
     @Description("Тест для проверки перехода на Санкт-Петербургский Яндекс Маркет")
     public void open() {
-        openYandexAndCheck();
+        openPageRedirectAndCheck("http://yandex.ru", "Яндекс маркет");
         changeCityBy("сан");
     }
 
