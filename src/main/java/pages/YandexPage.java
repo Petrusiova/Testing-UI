@@ -2,15 +2,13 @@ package pages;
 
 import io.qameta.allure.Step;
 import org.junit.Assert;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
-import ru.yandex.qatools.htmlelements.element.Button;
-import ru.yandex.qatools.htmlelements.element.Link;
 
 import java.util.ArrayList;
 
-public class YandexPage extends BasePage {
+public class YandexPage extends BasePage{
 
     @FindBy(id = "text")
     private WebElement resultStats;
@@ -18,49 +16,36 @@ public class YandexPage extends BasePage {
     @FindBy(className = "search2__button")
     private WebElement searchButton;
 
-    @FindBy(xpath = "//*[@class='iUh30']") ////что не так??
+    @FindBy(linkText = "Маркет")
     private WebElement pointButton;
 
 
-    @Step("Переходит на страницу www.yandex.ru")
-    public void goToYandex(){
-        getChromeDriver().get("http://www.yandex.ru");
-        checkStartPage();
-    }
-
-    @Step("Поиск по запросу \"{0}\"")
-    public void setSearch(String market) {
+    @Step("Устанавливаем значение {0} для поиска")
+    public YandexPage setSearch(String market) {
+        Assert.assertTrue("Не найдена строка для вводка запроса для поиска", resultStats.isDisplayed());
         resultStats.clear();
         resultStats.sendKeys(market);
         searchButton.click();
-        redirectToMarket();//передаешь market из аргумкнтов setSearch
-        //добавить ассерты на наличие элементов
-
-        Link newFind = new Link(getChromeDriver().findElement(By.xpath("...."+market+"")));
-        newFind.click();
+        return this;
     }
 
-    //добавить @Step + проверки на наличие элементоа
-    private void redirectToMarket() {
+    public void redirectToMarket() {
+        ChromeDriver driver = getChromeDriver();
+        Assert.assertTrue("Среди поисковой выдачи нет страницы Яндекс Маркета", pointButton.isDisplayed());
         pointButton.click();
-        ArrayList<String> tabs2 = new ArrayList<String>(getChromeDriver().getWindowHandles());
-        getChromeDriver().switchTo().window(tabs2.get(0));
-        getChromeDriver().close();
-        getChromeDriver().switchTo().window(tabs2.get(1));
+        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
+        Assert.assertEquals("Страница Яндекс Маркета не открылась в новом окне", 2, tabs.size());
+        driver.switchTo().window(tabs.get(0));
+        driver.close();
+        driver.switchTo().window(tabs.get(1));
+        Assert.assertEquals("Закрытие предыдущей страницы не произошло",
+                1, driver.getWindowHandles().size());
     }
 
-
-    @Step("Проверяем открылась ли страница Яндекса")
-    private void checkStartPage() {
-        Assert.assertEquals("Заголовок страницы не соответствует ожидаемому",
-                "Яндекс", getChromeDriver().getTitle());
+    @Step("Проверяем открылась ли страница Яндекса") //////
+    public void checkStartPage() {
+        String currentUrl = getChromeDriver().getCurrentUrl();
         Assert.assertTrue("Переход на стартовую страницу Яндекса не был выполнен",
-                getChromeDriver().getCurrentUrl().startsWith("https://yandex.ru"));
-        Assert.assertTrue("Не найдена строка для поиска",
-                getChromeDriver().findElementById("text").isDisplayed());//строка для поиска - вынести как отдельный элемент
-        Assert.assertTrue("Не найдена кнопка 'Найти'",
-                getChromeDriver().findElementByClassName("search2__button").isDisplayed());//вынести как элемент кнопку найти
+                currentUrl.startsWith("https://yandex.ru") || currentUrl.startsWith("https://www.yandex.ru"));
     }
-
-
 }
