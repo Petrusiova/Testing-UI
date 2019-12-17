@@ -30,7 +30,7 @@ public class MarketPage extends BasePage {
         region.sendKeys(city);
         region.click();
         String cityXPath = "//*[contains(text(),'" + fullName + "')]";
-        pageIsLoad(By.xpath(cityXPath));
+        elementOnPageIsLoad(By.xpath(cityXPath));
         WebElement spb = getChromeDriver().findElementByXPath(cityXPath);
         Assert.assertTrue("Ќе найдено всплывающее поле выбора региона", spb.isDisplayed());
         spb.click();

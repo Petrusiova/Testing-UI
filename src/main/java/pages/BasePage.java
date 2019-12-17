@@ -36,8 +36,8 @@ public class BasePage{
         chromeDriver.get(url);
     }
 
-    @Step("Переходим на страницу по ссылке {0}")
-    public void pageIsLoad(By by){
+    @Step("Проверяем загрузился ли необходимый элемент на странице")
+    public void elementOnPageIsLoad(By by){
         WebDriverWait wait = new WebDriverWait(chromeDriver, 20);
         wait.until(ExpectedConditions.elementToBeClickable(by));
     }
