@@ -15,6 +15,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class DOMExample {
 
@@ -45,13 +46,13 @@ public class DOMExample {
      * @param value         новое значение искомого тега в формате String
      */
     public void changeTagValue(
-            String fileName, String parentTagName, String parentTagValue, String childTagName, String value) {
+            String fileName, String parentTagName, String parentTagValue, String childTagName, String value, int index) {
         document.getDocumentElement().normalize();
         if (parentTagValue != null) {
-            updateElementValue(parentTagName, parentTagValue, childTagName, value);
+            updateElementValue(parentTagName, parentTagValue, childTagName, value, index);
         }
         else {
-            updateElementValue(parentTagName, childTagName, value);
+            updateElementValue(parentTagName, childTagName, value, index);
         }
         document.getDocumentElement().normalize();
         transformResultIntoFile(fileName);
@@ -63,37 +64,21 @@ public class DOMExample {
      * @param parentTagName родительский тег, внутри которого располагается n тегов, подлежащих изменению
      * @param childTagName  тег, подлежащий изменению
      * @param value         новое значение искомого тега в формате String
+     * @param index порядковый номер тега, подлежащий изменению
      */
-    private static void updateElementValue(
-            String parentTagName, String parentTagValue, String childTagName, String value) {
-        NodeList nodes = document.getElementsByTagName(parentTagName);
-
-        for (int i = 0; i < nodes.getLength(); i++) {
-            if (nodes.item(i).getTextContent().equals(parentTagValue)) {
-                Element element = (Element) nodes.item(i);
-
-
-                NodeList nodeList = element.getElementsByTagName(childTagName);
-                Node node = null;
-                if (nodeList.getLength() < 1) {
-                    element = (Element) element.getParentNode();
-                    node = element.getElementsByTagName(childTagName).item(0).getFirstChild();
-                } else {
-                    node = nodeList.item(0).getFirstChild();
-                }
-                node.setNodeValue(value);
-            }
-        }
+    private void updateElementValue(
+            String parentTagName, String parentTagValue, String childTagName, String value, int index) {
+        getAllNodeElementsByNeighbourTagValue(parentTagName, parentTagValue, childTagName)
+                .item(index).setNodeValue(value);
     }
 
-    private static void updateElementValue(String parentTagName, String childTagName, String value) {
-
+    private static void updateElementValue(String parentTagName, String childTagName, String value, int index) {
         NodeList nodes = document.getElementsByTagName(parentTagName);
         Element element = null;
 
         for (int i = 0; i < nodes.getLength(); i++) {
             element = (Element) nodes.item(i);
-            Node node = element.getElementsByTagName(childTagName).item(0).getFirstChild();
+            Node node = element.getElementsByTagName(childTagName).item(index).getFirstChild();
             node.setNodeValue(value);
         }
     }
@@ -124,13 +109,47 @@ public class DOMExample {
      * @param tagName имя тега(ов), значения которых необходимо получить
      * @return список значений тегов в формате String
      */
-    public ArrayList<String> getStringElementsByTagName(String tagName) {
+    public ArrayList<String> getListElementsByTagName(String tagName) {
         NodeList elements = document.getDocumentElement().getElementsByTagName(tagName);
-        ArrayList<String> list = new ArrayList<>();
-        for (int i = 0; i < elements.getLength(); i++) {
-            list.add(elements.item(i).getTextContent());
+        return createList(elements);
+    }
+
+    public String getStringByNeighbourValue(
+            String neighbourTagName, String neighbourTagValue, String childTagName, int index){
+        return getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName)
+                .item(index).getTextContent();
+    }
+
+    public List<String> getListByNeighbourValue(String neighbourTagName, String neighbourTagValue, String childTagName){
+        NodeList list = getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName);
+        return createList(list);
+    }
+
+    /**
+     * Получает NodeList элементов по имени соседнего или родительского элемента
+     *
+     * @param neighbourTagName имя тега(ов), по значению которого производится поиск
+     * @param neighbourTagValue значение тега, по которому производится поиск
+     * @param childTagName тег, ноду которого необходимо найти
+     * @return список тегов
+     */
+    private NodeList getAllNodeElementsByNeighbourTagValue(
+            String neighbourTagName, String neighbourTagValue, String childTagName) {
+        NodeList nodes = document.getElementsByTagName(neighbourTagName);
+        NodeList nodeList = null;
+        for (int i = 0; i < nodes.getLength(); i++) {
+            if (nodes.item(i).getTextContent().equals(neighbourTagValue)) {
+                Element element = (Element) nodes.item(i);
+
+                nodeList = element.getElementsByTagName(childTagName);
+
+                if (nodeList.getLength() < 1) {
+                    element = (Element) element.getParentNode();
+                    nodeList = element.getElementsByTagName(childTagName);
+                }
+            }
         }
-        return list;
+        return nodeList;
     }
 
     private void transformResultIntoFile(String fileName) {
@@ -141,5 +160,13 @@ public class DOMExample {
         } catch (TransformerException e) {
             e.printStackTrace();
         }
+    }
+
+    private ArrayList<String> createList(NodeList nodeList){
+        ArrayList<String> arrayList = new ArrayList<>();
+        for (int i = 0; i < nodeList.getLength(); i++){
+            arrayList.add(nodeList.item(i).getTextContent());
+        }
+        return arrayList;
     }
 }
