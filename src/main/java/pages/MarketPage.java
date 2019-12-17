@@ -29,7 +29,7 @@ public class MarketPage extends BasePage {
         region.sendKeys(city);
         try {
             Thread.sleep(5000);
-        } catch (InterruptedException e) {//избавься от этого
+        } catch (InterruptedException e) {//избавься от этого // Я в процессе, честно!!!
             e.printStackTrace();
         }
         region.click();

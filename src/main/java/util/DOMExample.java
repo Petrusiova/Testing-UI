@@ -20,28 +20,39 @@ public class DOMExample {
 
     private static Document document;
 
-    public DOMExample(String filePath) throws ParserConfigurationException, SAXException, IOException {
-        // Получение фабрики, чтобы после получить билдер документов.
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+    public DOMExample(String filePath) {
+        try {
+            // Получение фабрики, чтобы после получить билдер документов.
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-        // Получили из фабрики билдер, который парсит XML, создает структуру Document в виде иерархического дерева.
-        DocumentBuilder builder = factory.newDocumentBuilder();
+            // Получили из фабрики билдер, который парсит XML, создает структуру Document в виде иерархического дерева.
+            DocumentBuilder builder = factory.newDocumentBuilder();
 
-        // Запарсили XML, создав структуру Document. Теперь у нас есть доступ ко всем элементам, каким нам нужно.
-        document = builder.parse(new File(filePath));
+            // Запарсили XML, создав структуру Document. Теперь у нас есть доступ ко всем элементам, каким нам нужно.
+            document = builder.parse(new File(filePath));
+
+        } catch (ParserConfigurationException|IOException|SAXException e){
+            e.printStackTrace();
+        }
     }
 
     /**
      * Изменяет значение существующего элемента и перезаписывает в новый файл
      *
-     * @param fileName имя файла, в который необходимо записать новый xml документ
+     * @param fileName      имя файла, в который необходимо записать новый xml документ
      * @param parentTagName родительский тег, внутри которого располагается n тегов, подлежащих изменению
-     * @param childTagName тег, подлежащий изменению
-     * @param value новое значение искомого тега в формате String
+     * @param childTagName  тег, подлежащий изменению
+     * @param value         новое значение искомого тега в формате String
      */
-    public void changeTagValue(String fileName, String parentTagName, String childTagName, String value) {
+    public void changeTagValue(
+            String fileName, String parentTagName, String parentTagValue, String childTagName, String value) {
         document.getDocumentElement().normalize();
-        updateElementValue(parentTagName, childTagName, value);
+        if (parentTagValue != null) {
+            updateElementValue(parentTagName, parentTagValue, childTagName, value);
+        }
+        else {
+            updateElementValue(parentTagName, childTagName, value);
+        }
         document.getDocumentElement().normalize();
         transformResultIntoFile(fileName);
     }
@@ -50,9 +61,31 @@ public class DOMExample {
      * Обновляет значение существующего элемента
      *
      * @param parentTagName родительский тег, внутри которого располагается n тегов, подлежащих изменению
-     * @param childTagName тег, подлежащий изменению
-     * @param value новое значение искомого тега в формате String
+     * @param childTagName  тег, подлежащий изменению
+     * @param value         новое значение искомого тега в формате String
      */
+    private static void updateElementValue(
+            String parentTagName, String parentTagValue, String childTagName, String value) {
+        NodeList nodes = document.getElementsByTagName(parentTagName);
+
+        for (int i = 0; i < nodes.getLength(); i++) {
+            if (nodes.item(i).getTextContent().equals(parentTagValue)) {
+                Element element = (Element) nodes.item(i);
+
+
+                NodeList nodeList = element.getElementsByTagName(childTagName);
+                Node node = null;
+                if (nodeList.getLength() < 1) {
+                    element = (Element) element.getParentNode();
+                    node = element.getElementsByTagName(childTagName).item(0).getFirstChild();
+                } else {
+                    node = nodeList.item(0).getFirstChild();
+                }
+                node.setNodeValue(value);
+            }
+        }
+    }
+
     private static void updateElementValue(String parentTagName, String childTagName, String value) {
 
         NodeList nodes = document.getElementsByTagName(parentTagName);
@@ -68,8 +101,8 @@ public class DOMExample {
     /**
      * Добавляет новый элемент в XML документ
      *
-     * @param parentTagName родительский тег, внутри которого будет располагаться новый тег
-     * @param newElementName имя нового тега
+     * @param parentTagName       родительский тег, внутри которого будет располагаться новый тег
+     * @param newElementName      имя нового тега
      * @param newElementTextValue значение нового тега в формате String
      */
     private static void addElement(String parentTagName, String newElementName, String newElementTextValue) {
@@ -89,7 +122,6 @@ public class DOMExample {
      * (getDocumentElement возвращает ROOT элемент XML файла)
      *
      * @param tagName имя тега(ов), значения которых необходимо получить
-     *
      * @return список значений тегов в формате String
      */
     public ArrayList<String> getStringElementsByTagName(String tagName) {
