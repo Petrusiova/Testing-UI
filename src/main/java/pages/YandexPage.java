@@ -41,11 +41,4 @@ public class YandexPage extends BasePage{
         Assert.assertEquals("Закрытие предыдущей страницы не произошло",
                 1, driver.getWindowHandles().size());
     }
-
-    @Step("Проверяем открылась ли страница Яндекса") //////
-    public void checkStartPage() {
-        String currentUrl = getChromeDriver().getCurrentUrl();
-        Assert.assertTrue("Переход на стартовую страницу Яндекса не был выполнен",
-                currentUrl.startsWith("https://yandex.ru") || currentUrl.startsWith("https://www.yandex.ru"));
-    }
 }

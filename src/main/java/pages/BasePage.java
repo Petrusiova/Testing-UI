@@ -4,8 +4,6 @@ import io.qameta.allure.Step;
 import org.junit.After;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementDecorator;
-import ru.yandex.qatools.htmlelements.loader.decorator.HtmlElementLocatorFactory;
 import util.PropertyManager;
 
 import java.io.File;

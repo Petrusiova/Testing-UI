@@ -10,23 +10,15 @@ public class YandexSearchSteps extends BasePage {
     public void openPageRedirectAndCheck(String goTo, String search) {
         YandexPage page = new YandexPage();
         goTo(goTo);
-        page.checkStartPage();
         page.setSearch(search);
         page.redirectToMarket();
     }
 
     @Step("Смена города по первым трем буквам {0}")
-    public void changeCityBy(String firstLetters) {
+    public void changeCityBy(String firstLetters, String fullName) {
         MarketPage page = new MarketPage();
-        page.checkSearchMarketPage();
         page.anotherCity();
-        page.changeCity(firstLetters);
-        try {
-            Thread.sleep(5000);
-            page.choseSpb();
-        } catch (InterruptedException e) {//избавься от этого
-            e.printStackTrace();
-        }
+        page.changeCity(firstLetters, fullName);
     }
 
 
