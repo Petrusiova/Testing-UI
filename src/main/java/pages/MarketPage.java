@@ -2,6 +2,7 @@ package pages;
 
 import io.qameta.allure.Step;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -27,13 +28,10 @@ public class MarketPage extends BasePage {
         Assert.assertTrue("Не найдено поле для ввода региона", region.isDisplayed());
         region.clear();
         region.sendKeys(city);
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {//избавься от этого // Я в процессе, честно!!!
-            e.printStackTrace();
-        }
         region.click();
-        WebElement spb = getChromeDriver().findElementByXPath("//*[contains(text(),'" + fullName + "')]");
+        String cityXPath = "//*[contains(text(),'" + fullName + "')]";
+        pageIsLoad(By.xpath(cityXPath));
+        WebElement spb = getChromeDriver().findElementByXPath(cityXPath);
         Assert.assertTrue("Не найдено всплывающее поле выбора региона", spb.isDisplayed());
         spb.click();
         region.sendKeys(Keys.ENTER);
