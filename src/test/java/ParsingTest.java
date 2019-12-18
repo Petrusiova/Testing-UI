@@ -12,6 +12,7 @@ public class ParsingTest {
         String filePath = "C:\\Users\\Olia\\Desktop\\parsing.xml";
         DOMExample domExample = new DOMExample(filePath);
         domExample.getListByNeighbourValue("Vendor", "microprice", "Vendor");
+        domExample.getListByNeighbourAttrValue("Manufacturer", 0,"products", "pc", "Min");
 
         List<String> maxValues = domExample.getListElementsByTagName("Max");
         List<String> parents = domExample.getListElementsByTagName("Name");

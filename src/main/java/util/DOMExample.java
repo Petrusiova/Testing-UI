@@ -151,6 +151,12 @@ public class DOMExample {
         return createList(list);
     }
 
+    public List<String> getListByNeighbourAttrValue(
+            String neighbourTagName, int attrIndex, String attrName, String attrValue, String childTagName){
+        NodeList list = getAllNodeElementsByNeighbourAttrValue(neighbourTagName, attrIndex, attrName, attrValue, childTagName);
+        return createList(list);
+    }
+
     /**
      * Получает NodeList элементов по имени соседнего или родительского элемента
      *
@@ -165,14 +171,30 @@ public class DOMExample {
         NodeList nodeList = null;
         for (int i = 0; i < nodes.getLength(); i++) {
             if (nodes.item(i).getTextContent().equals(neighbourTagValue)) {
-                Element element = (Element) nodes.item(i);
+                nodeList = createNodeList(nodes.item(i), childTagName);
+            }
+        }
+        return nodeList;
+    }
 
-                nodeList = element.getElementsByTagName(childTagName);
-
-                if (nodeList.getLength() < 1) {
-                    element = (Element) element.getParentNode();
-                    nodeList = element.getElementsByTagName(childTagName);
-                }
+    /**
+     * Получает NodeList элементов по атрибутам соседнего или родительского элемента
+     *
+     * @param neighbourTagName имя тега(ов), по значению которого производится поиск
+     * @param attrName наименование атрибута тега, по которому производится поиск
+     * @param attrValue значение атрибута тега, по которому производится поиск
+     * @param childTagName тег, ноду которого необходимо найти
+     * @return список тегов
+     */
+    private NodeList getAllNodeElementsByNeighbourAttrValue(
+            String neighbourTagName, int attrIndex, String attrName, String attrValue, String childTagName) {
+        NodeList nodes = document.getElementsByTagName(neighbourTagName);
+        NodeList nodeList = null;
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Element element = (Element) nodes.item(i);
+            Node node = element.getAttributes().item(attrIndex);
+            if (node.getNodeName().equals(attrName) && node.getNodeValue().equals(attrValue)) {
+                nodeList = createNodeList(nodes.item(i), childTagName);
             }
         }
         return nodeList;
@@ -194,5 +216,17 @@ public class DOMExample {
             arrayList.add(nodeList.item(i).getTextContent());
         }
         return arrayList;
+    }
+
+    private NodeList createNodeList(Node node, String childTagName){
+        Element element = (Element) node;
+        NodeList nodeList = null;
+        nodeList = element.getElementsByTagName(childTagName);
+
+        if (nodeList.getLength() < 1) {
+            element = (Element) element.getParentNode();
+            nodeList = element.getElementsByTagName(childTagName);
+        }
+        return nodeList;
     }
 }
