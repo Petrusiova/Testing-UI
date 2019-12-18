@@ -49,10 +49,10 @@ public class DOMExample {
             String fileName, String parentTagName, String parentTagValue, String childTagName, String value, int index) {
         document.getDocumentElement().normalize();
         if (parentTagValue != null) {
-            updateElementValue(parentTagName, parentTagValue, childTagName, value, index);
+            updateElementValueWithParentValue(parentTagName, parentTagValue, childTagName, value, index);
         }
         else {
-            updateElementValue(parentTagName, childTagName, value, index);
+            updateElementValueWithParentTag(parentTagName, childTagName, value, index);
         }
         document.getDocumentElement().normalize();
         transformResultIntoFile(fileName);
@@ -66,19 +66,38 @@ public class DOMExample {
      * @param value         новое значение искомого тега в формате String
      * @param index порядковый номер тега, подлежащий изменению
      */
-    private void updateElementValue(
+    private void updateElementValueWithParentValue(
             String parentTagName, String parentTagValue, String childTagName, String value, int index) {
+
         getAllNodeElementsByNeighbourTagValue(parentTagName, parentTagValue, childTagName)
-                .item(index).setNodeValue(value);
+                .item(index).getFirstChild().setNodeValue(value);
     }
 
-    private static void updateElementValue(String parentTagName, String childTagName, String value, int index) {
+    private void updateElementValueWithParentValue(
+            String parentTagName, String parentTagValue, String childTagName, String value) {
+
+        getAllNodeElementsByNeighbourTagValue(parentTagName, parentTagValue, childTagName)
+                .item(0).setNodeValue(value);
+    }
+
+    private static void updateElementValueWithParentTag(String parentTagName, String childTagName, String value, int index) {
         NodeList nodes = document.getElementsByTagName(parentTagName);
         Element element = null;
 
         for (int i = 0; i < nodes.getLength(); i++) {
             element = (Element) nodes.item(i);
             Node node = element.getElementsByTagName(childTagName).item(index).getFirstChild();
+            node.setNodeValue(value);
+        }
+    }
+
+    private static void updateElementValueWithParentTag(String parentTagName, String childTagName, String value) {
+        NodeList nodes = document.getElementsByTagName(parentTagName);
+        Element element = null;
+
+        for (int i = 0; i < nodes.getLength(); i++) {
+            element = (Element) nodes.item(i);
+            Node node = element.getElementsByTagName(childTagName).item(0).getFirstChild();
             node.setNodeValue(value);
         }
     }
@@ -120,7 +139,14 @@ public class DOMExample {
                 .item(index).getTextContent();
     }
 
-    public List<String> getListByNeighbourValue(String neighbourTagName, String neighbourTagValue, String childTagName){
+    public String getStringByNeighbourValue(
+            String neighbourTagName, String neighbourTagValue, String childTagName){
+        return getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName)
+                .item(0).getTextContent();
+    }
+
+    public List<String> getListByNeighbourValue(
+            String neighbourTagName, String neighbourTagValue, String childTagName){
         NodeList list = getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName);
         return createList(list);
     }
