@@ -1,8 +1,12 @@
 import io.qameta.allure.Step;
+import org.junit.Assert;
 import pages.BasePage;
 import pages.CompTechPage;
 import pages.MarketPage;
 import pages.YandexPage;
+import util.DOMExample;
+
+import java.util.List;
 
 public class YandexSearchSteps extends BasePage {
 
@@ -20,14 +24,22 @@ public class YandexSearchSteps extends BasePage {
         MarketPage page = new MarketPage();
         page.anotherCity();
         page.changeCity(firstLetters, fullName);
-        page.changeCategory(category);
+        page.changeSection(category);
     }
 
     @Step("Change section on {0}")
-    public void changeSection(String section) {
+    public void changeSection(String section, String name) {
         CompTechPage compTechPage = new CompTechPage();
-        compTechPage.chooseSection(section);
+        compTechPage.changeCategory(section);
+        compTechPage.changeProducer(name);
     }
 
+    @Step("SearchProducerInXML")
+    public List<String> searchElements(String filePath, String tagName){
+        DOMExample domExample = new DOMExample(filePath);
+        List<String> elements = domExample.getListElementsByTagName(tagName);
+        Assert.assertFalse("Список значений тегов " + tagName + " не пустой", elements.isEmpty());
+        return elements;
+    }
 
 }

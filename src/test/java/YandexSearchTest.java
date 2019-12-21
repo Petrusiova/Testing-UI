@@ -1,6 +1,8 @@
 import io.qameta.allure.Description;
 import org.junit.Test;
 
+import java.util.List;
+
 public class YandexSearchTest extends YandexSearchSteps {
 
     @Test
@@ -8,7 +10,8 @@ public class YandexSearchTest extends YandexSearchSteps {
     public void open() {
         openPageRedirectAndCheck("http://yandex.ru", "Яндекс маркет");
         changeCityAndCategory("сан", "Санкт-Петербург", "Компьютерная техника");
-        changeSection("Ноутбуки");
+        List<String> searchProducer = searchElements("C:\\Users\\Olia\\Desktop\\parsing.xml", "Name");
+        changeSection("Ноутбуки", searchProducer.get(0));
         String s = "";
     }
 }
