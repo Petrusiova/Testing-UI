@@ -2,7 +2,9 @@ package pages;
 
 import io.qameta.allure.Step;
 import org.junit.After;
+import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -11,7 +13,7 @@ import util.PropertyManager;
 
 import java.io.File;
 
-public class BasePage{
+public class BasePage {
     private static ChromeDriver chromeDriver;
 
     public BasePage() {
@@ -32,14 +34,22 @@ public class BasePage{
     }
 
     @Step("Переходим на страницу по ссылке {0}")
-    public void goTo(String url){
+    public void goTo(String url) {
         chromeDriver.get(url);
     }
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
-    public void elementOnPageIsLoad(By by){
+    public void checkElementOnPage(By by){
         WebDriverWait wait = new WebDriverWait(chromeDriver, 20);
         wait.until(ExpectedConditions.elementToBeClickable(by));
+        Assert.assertTrue("Элемент" + by + " отсутствует на странице", chromeDriver.findElement(by).isDisplayed());
+    }
+
+    @Step("Проверяем загрузился ли необходимый элемент на странице")
+    public void checkElementOnPage(WebElement webElement) {
+        WebDriverWait wait = new WebDriverWait(chromeDriver, 20);
+        wait.until(ExpectedConditions.elementToBeClickable(webElement));
+        Assert.assertTrue("Элемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
     }
 
 

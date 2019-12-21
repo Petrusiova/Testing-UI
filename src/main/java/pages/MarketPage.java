@@ -18,6 +18,9 @@ public class MarketPage extends BasePage {
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
     private WebElement continueBtn;
 
+    @FindBy(xpath = "//*[contains(text(), 'Все категории')]")
+    private WebElement allCategories;
+
     public void anotherCity() {
         Assert.assertTrue("Не найдена кнопка выбора другого города", answerNo.isDisplayed());
         answerNo.click();
@@ -30,10 +33,19 @@ public class MarketPage extends BasePage {
         region.sendKeys(city);
         region.click();
         String cityXPath = "//*[contains(text(),'" + fullName + "')]";
-        elementOnPageIsLoad(By.xpath(cityXPath));
+        checkElementOnPage(By.xpath(cityXPath));
         WebElement spb = getChromeDriver().findElementByXPath(cityXPath);
         Assert.assertTrue("Не найдено всплывающее поле выбора региона", spb.isDisplayed());
         spb.click();
         region.sendKeys(Keys.ENTER);
+    }
+
+    @Step("Change category on {0}")
+    public void changeCategory(String category) {
+        checkElementOnPage(allCategories);
+        allCategories.click();
+        WebElement categoryElement = getChromeDriver().findElementByXPath("//*[contains(text(), '" + category + "')]");
+        checkElementOnPage(categoryElement);
+        categoryElement.click();
     }
 }

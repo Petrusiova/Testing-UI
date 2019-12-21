@@ -1,5 +1,6 @@
 import io.qameta.allure.Step;
 import pages.BasePage;
+import pages.CompTechPage;
 import pages.MarketPage;
 import pages.YandexPage;
 
@@ -14,11 +15,18 @@ public class YandexSearchSteps extends BasePage {
         page.redirectToMarket();
     }
 
-    @Step("Смена города по первым трем буквам {0}")
-    public void changeCityBy(String firstLetters, String fullName) {
+    @Step("Change city by first three letters {0} and category on {2}")
+    public void changeCityAndCategory(String firstLetters, String fullName, String category) {
         MarketPage page = new MarketPage();
         page.anotherCity();
         page.changeCity(firstLetters, fullName);
+        page.changeCategory(category);
+    }
+
+    @Step("Change section on {0}")
+    public void changeSection(String section) {
+        CompTechPage compTechPage = new CompTechPage();
+        compTechPage.chooseSection(section);
     }
 
 
