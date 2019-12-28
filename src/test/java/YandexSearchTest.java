@@ -9,6 +9,7 @@ public class YandexSearchTest extends YandexSearchSteps {
     @Description("Тест для проверки перехода на Санкт-Петербургский Яндекс Маркет")
     public void open() {
         String filePath = "C:\\Users\\Olia\\Desktop\\parsing.xml";
+        String rating = getNodeAttributes(filePath, "Excluded_vendors", 0, "rating");
         String maxPrice = searchElements(filePath, "Price").get(0).trim();
         List<String> manufacturers = searchElements(filePath, "Name");
         List<String> minValues = searchValue(filePath, "Name", manufacturers.get(0), "Min");
@@ -19,10 +20,12 @@ public class YandexSearchTest extends YandexSearchSteps {
 //                maxValues.set(i, maxPrice);
 //            }
 //        }
+
+
         openPageRedirectAndCheck("http://yandex.ru", "Яндекс маркет");
         changeCityAndCategory("сан", "Санкт-Петербург", "Компьютерная техника");
         changeSection("Ноутбуки", manufacturers.get(0), minValues.get(0), maxValues.get(0));
-        changeShops(excludedVendors);
+        changeShops(excludedVendors, rating, "по цене", manufacturers.get(0));
         String s = "";
     }
 }

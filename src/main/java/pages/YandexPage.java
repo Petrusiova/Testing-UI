@@ -33,11 +33,7 @@ public class YandexPage extends BasePage{
         ChromeDriver driver = getChromeDriver();
         Assert.assertTrue("Среди поисковой выдачи нет страницы Яндекс Маркета", pointButton.isDisplayed());
         pointButton.click();
-        ArrayList<String> tabs = new ArrayList<>(driver.getWindowHandles());
-        Assert.assertEquals("Страница Яндекс Маркета не открылась в новом окне", 2, tabs.size());
-        driver.switchTo().window(tabs.get(0));
-        driver.close();
-        driver.switchTo().window(tabs.get(1));
+        closeFirstWindow();
         Assert.assertEquals("Закрытие предыдущей страницы не произошло",
                 1, driver.getWindowHandles().size());
     }

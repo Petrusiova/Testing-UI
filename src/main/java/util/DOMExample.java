@@ -157,6 +157,15 @@ public class DOMExample {
         return createList(list);
     }
 
+    public NamedNodeMap getNodeAttributes(String tagName, int nodeIndex) {
+        NodeList nodes = document.getElementsByTagName(tagName);
+        Element element = (Element) nodes.item(nodeIndex);
+        NamedNodeMap attributes = element.getAttributes();
+
+
+        return attributes;
+    }
+
     /**
      * Получает NodeList элементов по имени соседнего или родительского элемента
      *

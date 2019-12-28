@@ -7,6 +7,7 @@ import pages.YandexPage;
 import util.DOMExample;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class YandexSearchSteps extends BasePage {
 
@@ -24,6 +25,7 @@ public class YandexSearchSteps extends BasePage {
         MarketPage page = new MarketPage();
         page.anotherCity();
         page.changeCity(firstLetters, fullName);
+        getChromeDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
         page.changeSection(category);
     }
 
@@ -38,9 +40,12 @@ public class YandexSearchSteps extends BasePage {
     }
 
     @Step("Change shops")
-    public void changeShops(List<String> excludedVendors){
+    public void changeShops(List<String> excludedVendors, String rating, String value, String manufacturer){
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeShops(excludedVendors);
+        compTechPage.changeRating(rating);
+        compTechPage.sortBy(value);
+        compTechPage.checkItem(manufacturer);
     }
 
     @Step ("Search max price in XML")
@@ -55,6 +60,13 @@ public class YandexSearchSteps extends BasePage {
         List<String> elements = new DOMExample(filePath).getListElementsByTagName(tagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
         return elements;
+    }
+
+    public String getNodeAttributes(String filePath, String tagName, int nodeIndex, String attrName){
+        Assert.assertNotNull("Невозможно вычислить значение атрибута с именем null", attrName);
+        String attribute = new DOMExample(filePath).getNodeAttributes(tagName, nodeIndex).getNamedItem(attrName).getNodeValue();
+        Assert.assertNotNull("Не найден атрибут с именем " + attrName, attribute);
+        return attribute;
     }
 
     @Step ("SearchValueInXML")

@@ -7,6 +7,8 @@ import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.concurrent.TimeUnit;
+
 public class MarketPage extends BasePage {
 
     @FindBy(xpath = "//div[2]/div[2]/span")
@@ -18,7 +20,7 @@ public class MarketPage extends BasePage {
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
     private WebElement continueBtn;
 
-    @FindBy(xpath = "//*[contains(text(), 'Все категории')]")
+    @FindBy(xpath = "//*[@id=\"27903768-tab\"]//span")
     private WebElement allCategories;
 
     public void anotherCity() {
@@ -42,10 +44,16 @@ public class MarketPage extends BasePage {
 
     @Step("Change category on {0}")
     public void changeSection(String category) {
-        checkElementOnPage(allCategories);
-        allCategories.click();
+//        getChromeDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
+//        checkElementOnPage(allCategories);
+//        Assert.assertTrue("Не найдено поле для выбора всех категорий", allCategories.isDisplayed());
+//        allCategories.click();
+//        WebElement allCategories = getChromeDriver().findElementByXPath("//*[contains(text(), 'Все категории')]");
+//        getChromeDriver().manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
+//        allCategories.click();
         WebElement categoryElement = getChromeDriver().findElementByXPath("//*[contains(text(), '" + category + "')]");
         checkElementOnPage(categoryElement);
+//        getChromeDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         categoryElement.click();
     }
 }

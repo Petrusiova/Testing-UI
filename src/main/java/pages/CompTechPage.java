@@ -10,6 +10,7 @@ import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class CompTechPage extends BasePage {
 
@@ -67,6 +68,7 @@ public class CompTechPage extends BasePage {
     @Step("Change count of showed items")
     public void changeShowedCount(){
         Assert.assertTrue("Ќе найдено поле выбора количество показанных товаров", showCount.isDisplayed());
+        checkElementOnPage(showCount);
         showCount.click();
         getChromeDriver().findElementByXPath("//span[contains(text(), 'ѕоказывать по 12')]").click();
     }
@@ -79,9 +81,22 @@ public class CompTechPage extends BasePage {
                 "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
     }
 
+    @Step("Choose third notebook on page")
+    public void checkItem(String manufacturer){
+        WebElement noteBook = getChromeDriver().findElementsByXPath(
+                "//*[@class='link n-link_theme_blue link_type_cpc i-bem link_js_inited']").get(2);
+        noteBook.click();
+        closeFirstWindow();
+        getChromeDriver().findElementByXPath("//div[6]/div/div/div/ul/li[2]/a").click();
+        Assert.assertEquals("ѕроизводитель не соответствует ожидаемому", manufacturer,
+        getChromeDriver().findElementsByXPath("//*[@class='n-breadcrumbs__item']").get(1).getText());
+    }
+
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
+        getChromeDriver().manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
         // —обираем в коллекцию все отображаемые на странице магазины
         List<WebElement> shopList = getChromeDriver().findElementsByXPath(xPath);
+        shopList.forEach(this::checkElementOnPage);
         for (int i = 0; i < excludedVendors.size(); i++){
             String vendor = excludedVendors.get(i);
             String target = vendor.substring(0, 1);
@@ -98,6 +113,7 @@ public class CompTechPage extends BasePage {
             for (WebElement shop : shopList) {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
                     //  ликаем на магазин
+                    checkElementOnPage(shop);
                     shop.click();
                     // ¬ыполн€ем скроллинг, при котором искомый магазин находитс€ на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
@@ -106,5 +122,29 @@ public class CompTechPage extends BasePage {
             // ѕерезапускаем метод с новым набором прокликанных магазинов
             scrollElementsAndClick(xPath, excludedVendors, unSelected);
         }
+    }
+
+    @Step("Change rating")
+    public void changeRating(String rating) {
+        if (rating == "" || rating == null) {
+            chooseRating("//*[@class=\"_1FbxpCIr0K _3A2H6kwJcC\"]");
+        } else if (Integer.parseInt(rating) <= 3) {
+            chooseRating("//*[@class=\"_1FbxpCIr0K XNE5y9RjQT\"]");
+        } else if (Integer.parseInt(rating) > 3) {
+            chooseRating("//*[@class=\"_1FbxpCIr0K _3RxxCpjiKz\"]");
+        }
+    }
+
+    public void sortBy(String value){
+        WebElement sort = getChromeDriver().findElementByXPath("//*[contains(text(), '" + value + "')]");
+        checkElementOnPage(sort);
+        sort.click();
+        sort.click();
+    }
+
+    private void chooseRating(String xPath){
+        WebElement rating = getChromeDriver().findElementByXPath(xPath);
+        checkElementOnPage(rating);
+        rating.click();
     }
 }
