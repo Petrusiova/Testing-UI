@@ -80,24 +80,30 @@ public class CompTechPage extends BasePage {
     }
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
+        // —обираем в коллекцию все отображаемые на странице магазины
         List<WebElement> shopList = getChromeDriver().findElementsByXPath(xPath);
         for (int i = 0; i < excludedVendors.size(); i++){
             String vendor = excludedVendors.get(i);
             String target = vendor.substring(0, 1);
+            // ¬се нежелательные магазины из файла теперь с большой буквы (как на странице)
             excludedVendors.set(i, vendor.replace(target, target.toUpperCase()));
         }
+        // —обираем все магазины, на которые не нужно кликать: нежелательные + на которые уже кликали
         excludedVendors.addAll(old);
         ArrayList<String> unSelected = new ArrayList<>();
-
+        // —обираем все отображаемые магазины
         shopList.forEach(item -> unSelected.add(item.getText()));
 
         if (!old.containsAll(unSelected)) {
             for (WebElement shop : shopList) {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
+                    //  ликаем на магазин
                     shop.click();
+                    // ¬ыполн€ем скроллинг, при котором искомый магазин находитс€ на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
                 }
             }
+            // ѕерезапускаем метод с новым набором прокликанных магазинов
             scrollElementsAndClick(xPath, excludedVendors, unSelected);
         }
     }
