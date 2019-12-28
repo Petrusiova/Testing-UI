@@ -36,6 +36,7 @@ public class BasePage {
     @Step("Переходим на страницу по ссылке {0}")
     public void goTo(String url) {
         chromeDriver.get(url);
+        chromeDriver.manage().window().maximize();
     }
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")

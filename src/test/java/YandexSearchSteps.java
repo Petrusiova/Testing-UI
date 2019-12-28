@@ -37,26 +37,29 @@ public class YandexSearchSteps extends BasePage {
         compTechPage.changeShowedCount();
     }
 
+    @Step("Change shops")
+    public void changeShops(List<String> excludedVendors){
+        CompTechPage compTechPage = new CompTechPage();
+        compTechPage.changeShops(excludedVendors);
+    }
+
     @Step ("Search max price in XML")
     public List<String> searchMaxPrice(String filePath, String tagName, String tagValue, String childTagName){
-        DOMExample domExample = new DOMExample(filePath);
-        List<String> elements = domExample.getListByNeighbourValue(tagName, tagValue, childTagName);
+        List<String> elements = new DOMExample(filePath).getListByNeighbourValue(tagName, tagValue, childTagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
         return elements;
     }
 
     @Step("SearchProducerInXML")
     public List<String> searchElements(String filePath, String tagName){
-        DOMExample domExample = new DOMExample(filePath);
-        List<String> elements = domExample.getListElementsByTagName(tagName);
+        List<String> elements = new DOMExample(filePath).getListElementsByTagName(tagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
         return elements;
     }
 
     @Step ("SearchValueInXML")
-    public List<String> searchMinValue(String filePath, String neighbourTag, String neighbourValue, String childTag){
-        DOMExample domExample = new DOMExample(filePath);
-        List<String> elements = domExample.getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
+    public List<String> searchValue(String filePath, String neighbourTag, String neighbourValue, String childTag){
+        List<String> elements = new DOMExample(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
         Assert.assertFalse("Список значений тегов " + childTag + " пустой", elements.isEmpty());
         return elements;
     }
