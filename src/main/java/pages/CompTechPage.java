@@ -3,7 +3,6 @@ package pages;
 import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.By;
-import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -64,15 +63,9 @@ public class CompTechPage extends BasePage {
 
     @Step("Change count of showed items")
     public void changeShowedCount() {
-//        checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         checkElementOnPage(showCount);
-        try {
-            showCount.click();
-        } catch (ElementClickInterceptedException e){
-            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
-            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
-            executor.executeScript("arguments[0].click()", showCount);
-        }
+//            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
+        clickElement(showCount);
         getChromeDriver().findElementByXPath("//span[contains(text(), 'Показывать по 12')]").click();
     }
 
