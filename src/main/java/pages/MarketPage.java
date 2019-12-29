@@ -40,20 +40,9 @@ public class MarketPage extends BasePage {
 
     @Step("Change category on {0}")
     public void changeSection(String category) {
-        try{
-            allCategories.click();
-        }catch (WebDriverException e){
-            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
-            executor.executeScript("arguments[0].click()", allCategories);
-        }
-
+        clickElement(allCategories);
         WebElement categoryElement = getChromeDriver().findElementByXPath("//*[contains(text(), '" + category + "')]");
         checkElementOnPage(categoryElement);
-        try{
-            categoryElement.click();
-        }catch (WebDriverException e){
-            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
-            executor.executeScript("arguments[0].click()", categoryElement);
-        }
+        clickElement(categoryElement);
     }
 }

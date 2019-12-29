@@ -79,18 +79,13 @@ public class CompTechPage extends BasePage {
     @Step("Change shops without included")
     public void changeShops(List<String> excludedVendors) {
         waitFor(10);
-        By allCategories = By.xpath("//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button");
-        checkElementOnPage(allCategories);
+        By allShops = By.xpath("//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button");
+        checkElementOnPage(allShops);
         waitFor(10);
-        try {
-            getChromeDriver().findElement(allCategories).click();
-        } catch (ElementClickInterceptedException e){
-            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
-            executor.executeScript("arguments[0].click()", getChromeDriver().findElement(allCategories));
-        }
+        clickElement(getChromeDriver().findElement(allShops));
         scrollElementsAndClick(
                 "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
-        getChromeDriver().findElement(allCategories).click();
+        getChromeDriver().findElement(allShops).click();
     }
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
@@ -115,12 +110,7 @@ public class CompTechPage extends BasePage {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
                     //  ликаем на магазин
                     checkElementOnPage(shop);
-                    try {
-                        shop.click();
-                    } catch (ElementClickInterceptedException e){
-                        JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
-                        executor.executeScript("arguments[0].click()", shop);
-                    }
+                    clickElement(shop);
                     // ¬ыполн€ем скроллинг, при котором искомый магазин находитс€ на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
                 }

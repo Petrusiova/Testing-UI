@@ -4,6 +4,8 @@ import io.qameta.allure.Step;
 import org.junit.After;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -95,5 +97,14 @@ public class BasePage {
 
     public void waitFor(int sec){
         getChromeDriver().manage().timeouts().implicitlyWait(sec, TimeUnit.SECONDS);
+    }
+
+    public void clickElement(WebElement element){
+        try{
+            element.click();
+        }catch (WebDriverException e){
+            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+            executor.executeScript("arguments[0].click()", element);
+        }
     }
 }
