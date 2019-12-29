@@ -3,9 +3,9 @@ package pages;
 import io.qameta.allure.Step;
 import org.junit.Assert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ElementClickInterceptedException;
 import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.ArrayList;
@@ -26,8 +26,6 @@ public class CompTechPage extends BasePage {
     @FindBy(xpath = "//div[2]/div/div[3]/span")
     private WebElement showCount;
 
-//    @FindBy(xpath = "//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button")
-//    private WebElement showAllShops;
 
     @Step("Change product category on {0}")
     public void changeCategory(String section) {
@@ -37,54 +35,56 @@ public class CompTechPage extends BasePage {
     }
 
     @Step("Select producer filter: {0}")
-    public void changeProducer(String name){
+    public void changeProducer(String name) {
         checkElementOnPage(allProducers);
         allProducers.click();
         String fieldXPath = "//*[@id=\"7893318-suggester\"]";
         checkElementOnPage(By.xpath(fieldXPath));
-        ChromeDriver driver = getChromeDriver();
-        WebElement searchField = driver.findElementByXPath(fieldXPath);
+        WebElement searchField = getChromeDriver().findElementByXPath(fieldXPath);
         searchField.click();
         searchField.sendKeys(name);
-        WebElement producer = driver.findElementByXPath("//span[contains(text(), '" + name + "')]");
+        WebElement producer = getChromeDriver().findElementByXPath("//span[contains(text(), '" + name + "')]");
         Assert.assertTrue("Не найден подходящий производитель", producer.isDisplayed());
         producer.click();
     }
 
     @Step("Change lowest price")
-    public  void changeLowestPrice(String value){
-        Assert.assertTrue("Не найдено поле ввода минимальной цены", lowestPrice.isDisplayed());
+    public void changeLowestPrice(String value) {
+        checkElementOnPage(lowestPrice);
         lowestPrice.click();
         lowestPrice.sendKeys(value);
     }
 
     @Step("Change highest price")
-    public  void changeHighestPrice(String value){
-        Assert.assertTrue("Не найдено поле ввода максимальной цены", highestPrice.isDisplayed());
+    public void changeHighestPrice(String value) {
+        checkElementOnPage(highestPrice);
         highestPrice.click();
         highestPrice.sendKeys(value);
     }
 
     @Step("Change count of showed items")
-    public void changeShowedCount(){
-        Assert.assertTrue("Не найдено поле выбора количество показанных товаров", showCount.isDisplayed());
+    public void changeShowedCount() {
+//        checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         checkElementOnPage(showCount);
-        showCount.click();
+        try {
+            showCount.click();
+        } catch (ElementClickInterceptedException e){
+            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
+            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+            executor.executeScript("arguments[0].click()", showCount);
+        }
         getChromeDriver().findElementByXPath("//span[contains(text(), 'Показывать по 12')]").click();
     }
 
     @Step("Change shops without included")
-    public void changeShops(List<String> excludedVendors){
-        String allShops = "//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button";
-//        checkElementOnPage(By.xpath(allShops));
-        try {
-            Thread.sleep(9*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        getChromeDriver().findElementByXPath(allShops).click();
+    public void changeShops(List<String> excludedVendors) {
+        getChromeDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        By allCategories = By.xpath("//*[@class=\"n-w-tab__control-hamburger\"]");
+        checkElementOnPage(allCategories);
+        getChromeDriver().findElement(allCategories).click();
         scrollElementsAndClick(
                 "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
+        getChromeDriver().findElement(allCategories).click();
     }
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
@@ -92,7 +92,7 @@ public class CompTechPage extends BasePage {
         // Собираем в коллекцию все отображаемые на странице магазины
         List<WebElement> shopList = getChromeDriver().findElementsByXPath(xPath);
         shopList.forEach(this::checkElementOnPage);
-        for (int i = 0; i < excludedVendors.size(); i++){
+        for (int i = 0; i < excludedVendors.size(); i++) {
             String vendor = excludedVendors.get(i);
             String target = vendor.substring(0, 1);
             // Все нежелательные магазины из файла теперь с большой буквы (как на странице)
@@ -108,7 +108,7 @@ public class CompTechPage extends BasePage {
             for (WebElement shop : shopList) {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
                     // Кликаем на магазин
-//                    checkElementOnPage(shop);
+                    checkElementOnPage(shop);
                     shop.click();
                     // Выполняем скроллинг, при котором искомый магазин находится на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
@@ -119,31 +119,10 @@ public class CompTechPage extends BasePage {
         }
     }
 
-    @Step("Choose third notebook on page")
-    public void checkItem(String manufacturer){
-        String thirdPositionPath = "//div[6]/div[2]/div[1]/div[2]/div/div[1]/div[3]/div[4]/div[1]/h3/a";
-        try {
-            Thread.sleep(10*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", findElement(By.xpath(thirdPositionPath), 20));
-        getChromeDriver().findElementByXPath(thirdPositionPath).click();
-        closePreviousWindow();
-        String characteristics = "//*[contains(text(), 'Характеристики')]";
-        ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", findElement(By.xpath(characteristics), 20));
-        try {
-            Thread.sleep(9*1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        getChromeDriver().findElementByXPath(characteristics).click();
-        Assert.assertEquals("Производитель не соответствует ожидаемому", manufacturer,
-                getChromeDriver().findElementsByXPath("//*[@class='n-breadcrumbs__item']").get(1).getText());
-    }
-
     @Step("Change rating")
     public void changeRating(String rating) {
+        getChromeDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        getChromeDriver().manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
         if (rating == "" || rating == null) {
             chooseRating("//*[@class=\"_1FbxpCIr0K _3A2H6kwJcC\"]");
         } else if (Integer.parseInt(rating) <= 3) {
@@ -153,16 +132,37 @@ public class CompTechPage extends BasePage {
         }
     }
 
-    public void sortBy(String value){
+    private void chooseRating(String xPath) {
+        WebElement rating = getChromeDriver().findElementByXPath(xPath);
+        checkElementOnPage(rating);
+        rating.click();
+    }
+
+    public void sortBy(String value) {
         WebElement sort = getChromeDriver().findElementByXPath("//*[contains(text(), '" + value + "')]");
         checkElementOnPage(sort);
         sort.click();
         sort.click();
     }
 
-    private void chooseRating(String xPath){
-        WebElement rating = getChromeDriver().findElementByXPath(xPath);
-        checkElementOnPage(rating);
-        rating.click();
+    @Step("Choose third notebook on page")
+    public void chooseThirdElement() {
+        checkIsInvisible(By.xpath("//*[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
+        By noteBook = By.xpath("//div[6]/div[2]/div[1]/div[2]/div/div[1]/div[3]/div[4]/div[1]/h3/a");
+        checkElementOnPage(noteBook);
+        getChromeDriver().findElement(noteBook).click();
+        closePreviousWindow();
+    }
+
+    @Step("Checking producer is chosen")
+    public void validateManufacturer(String manufacturer){
+        By producer = By.xpath("//*[@id=\"n-breadcrumbs\"]/li[2]/a/span");
+        checkElementOnPage(producer);
+        Assert.assertEquals("Производитель не соответствует ожидаемому", manufacturer,
+                getChromeDriver().findElement(producer).getText());
+
+        By chars = By.xpath("//div[8]/div/div/div/ul/li[2]/a");
+        checkElementOnPage(chars);
+        getChromeDriver().findElement(chars).click();
     }
 }

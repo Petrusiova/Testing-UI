@@ -44,6 +44,8 @@ public class BasePage {
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(By by){
+        getChromeDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
         WebDriverWait wait = new WebDriverWait(chromeDriver, 40);
         wait.until(ExpectedConditions.elementToBeClickable(by));
         Assert.assertTrue("Элемент" + by + " отсутствует на странице", chromeDriver.findElement(by).isDisplayed());
@@ -51,16 +53,16 @@ public class BasePage {
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(WebElement webElement) {
-        for (int i = 0; i < 40; i++){
-            if (!webElement.isDisplayed()){
-                getChromeDriver().manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
-            }
-            else break;
-        }
-
-//        WebDriverWait wait = new WebDriverWait(chromeDriver, 35);
-//        wait.until(ExpectedConditions.elementToBeClickable(webElement));
+        chromeDriver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+        WebDriverWait wait = new WebDriverWait(chromeDriver, 35);
+        wait.until(ExpectedConditions.elementToBeClickable(webElement));
         Assert.assertTrue("Элемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
+    }
+
+    public void checkIsInvisible(By by){
+        new WebDriverWait(getChromeDriver(), 10)
+                .until(ExpectedConditions.invisibilityOf(getChromeDriver().findElement(by)));
     }
 
     public WebElement findElement(By by, int timeOut) {

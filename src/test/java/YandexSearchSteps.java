@@ -45,7 +45,8 @@ public class YandexSearchSteps extends BasePage {
         compTechPage.changeShops(excludedVendors);
         compTechPage.changeRating(rating);
         compTechPage.sortBy(value);
-        compTechPage.checkItem(manufacturer);
+        compTechPage.chooseThirdElement();
+        compTechPage.validateManufacturer(manufacturer);
     }
 
     @Step ("Search max price in XML")
