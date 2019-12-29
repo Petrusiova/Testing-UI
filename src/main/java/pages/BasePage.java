@@ -44,7 +44,7 @@ public class BasePage {
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(By by){
-        getChromeDriver().manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         chromeDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
         WebDriverWait wait = new WebDriverWait(chromeDriver, 40);
         wait.until(ExpectedConditions.elementToBeClickable(by));
@@ -91,5 +91,9 @@ public class BasePage {
         chromeDriver.switchTo().window(tabs.get(0));
         chromeDriver.close();
         chromeDriver.switchTo().window(tabs.get(1));
+    }
+
+    public void waitFor(int sec){
+        getChromeDriver().manage().timeouts().implicitlyWait(sec, TimeUnit.SECONDS);
     }
 }

@@ -55,6 +55,5 @@ public class MarketPage extends BasePage {
             JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
             executor.executeScript("arguments[0].click()", categoryElement);
         }
-//        categoryElement.click();
     }
 }

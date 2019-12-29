@@ -78,17 +78,23 @@ public class CompTechPage extends BasePage {
 
     @Step("Change shops without included")
     public void changeShops(List<String> excludedVendors) {
-        getChromeDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
-        By allCategories = By.xpath("//*[@class=\"n-w-tab__control-hamburger\"]");
+        waitFor(10);
+        By allCategories = By.xpath("//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button");
         checkElementOnPage(allCategories);
-        getChromeDriver().findElement(allCategories).click();
+        waitFor(10);
+        try {
+            getChromeDriver().findElement(allCategories).click();
+        } catch (ElementClickInterceptedException e){
+            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+            executor.executeScript("arguments[0].click()", getChromeDriver().findElement(allCategories));
+        }
         scrollElementsAndClick(
                 "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
         getChromeDriver().findElement(allCategories).click();
     }
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
-        getChromeDriver().manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
+        waitFor(8);
         // —обираем в коллекцию все отображаемые на странице магазины
         List<WebElement> shopList = getChromeDriver().findElementsByXPath(xPath);
         shopList.forEach(this::checkElementOnPage);
@@ -109,7 +115,12 @@ public class CompTechPage extends BasePage {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
                     //  ликаем на магазин
                     checkElementOnPage(shop);
-                    shop.click();
+                    try {
+                        shop.click();
+                    } catch (ElementClickInterceptedException e){
+                        JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+                        executor.executeScript("arguments[0].click()", shop);
+                    }
                     // ¬ыполн€ем скроллинг, при котором искомый магазин находитс€ на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
                 }
