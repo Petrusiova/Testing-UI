@@ -26,8 +26,8 @@ public class CompTechPage extends BasePage {
     @FindBy(xpath = "//div[2]/div/div[3]/span")
     private WebElement showCount;
 
-    @FindBy(xpath = "//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button")
-    private WebElement showAllShops;
+//    @FindBy(xpath = "//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button")
+//    private WebElement showAllShops;
 
     @Step("Change product category on {0}")
     public void changeCategory(String section) {
@@ -75,21 +75,16 @@ public class CompTechPage extends BasePage {
 
     @Step("Change shops without included")
     public void changeShops(List<String> excludedVendors){
-        Assert.assertTrue("Ќе найдено поле выбора количество показанных товаров", showAllShops.isDisplayed());
-        showAllShops.click();
+        String allShops = "//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button";
+//        checkElementOnPage(By.xpath(allShops));
+        try {
+            Thread.sleep(9*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        getChromeDriver().findElementByXPath(allShops).click();
         scrollElementsAndClick(
                 "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
-    }
-
-    @Step("Choose third notebook on page")
-    public void checkItem(String manufacturer){
-        WebElement noteBook = getChromeDriver().findElementsByXPath(
-                "//*[@class='link n-link_theme_blue link_type_cpc i-bem link_js_inited']").get(2);
-        noteBook.click();
-        closeFirstWindow();
-        getChromeDriver().findElementByXPath("//div[6]/div/div/div/ul/li[2]/a").click();
-        Assert.assertEquals("ѕроизводитель не соответствует ожидаемому", manufacturer,
-        getChromeDriver().findElementsByXPath("//*[@class='n-breadcrumbs__item']").get(1).getText());
     }
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
@@ -113,7 +108,7 @@ public class CompTechPage extends BasePage {
             for (WebElement shop : shopList) {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
                     //  ликаем на магазин
-                    checkElementOnPage(shop);
+//                    checkElementOnPage(shop);
                     shop.click();
                     // ¬ыполн€ем скроллинг, при котором искомый магазин находитс€ на первой строчке
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
@@ -122,6 +117,29 @@ public class CompTechPage extends BasePage {
             // ѕерезапускаем метод с новым набором прокликанных магазинов
             scrollElementsAndClick(xPath, excludedVendors, unSelected);
         }
+    }
+
+    @Step("Choose third notebook on page")
+    public void checkItem(String manufacturer){
+        String thirdPositionPath = "//div[6]/div[2]/div[1]/div[2]/div/div[1]/div[3]/div[4]/div[1]/h3/a";
+        try {
+            Thread.sleep(10*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", findElement(By.xpath(thirdPositionPath), 20));
+        getChromeDriver().findElementByXPath(thirdPositionPath).click();
+        closePreviousWindow();
+        String characteristics = "//*[contains(text(), '’арактеристики')]";
+        ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", findElement(By.xpath(characteristics), 20));
+        try {
+            Thread.sleep(9*1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        getChromeDriver().findElementByXPath(characteristics).click();
+        Assert.assertEquals("ѕроизводитель не соответствует ожидаемому", manufacturer,
+                getChromeDriver().findElementsByXPath("//*[@class='n-breadcrumbs__item']").get(1).getText());
     }
 
     @Step("Change rating")

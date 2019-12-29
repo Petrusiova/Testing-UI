@@ -25,7 +25,7 @@ public class YandexSearchSteps extends BasePage {
         MarketPage page = new MarketPage();
         page.anotherCity();
         page.changeCity(firstLetters, fullName);
-        getChromeDriver().manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+        getChromeDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
         page.changeSection(category);
     }
 

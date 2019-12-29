@@ -2,12 +2,8 @@ package pages;
 
 import io.qameta.allure.Step;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.concurrent.TimeUnit;
 
 public class MarketPage extends BasePage {
 
@@ -20,7 +16,7 @@ public class MarketPage extends BasePage {
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
     private WebElement continueBtn;
 
-    @FindBy(xpath = "//*[@id=\"27903768-tab\"]//span")
+    @FindBy(xpath = "//*[contains(text(), 'Все категории')]")
     private WebElement allCategories;
 
     public void anotherCity() {
@@ -44,16 +40,21 @@ public class MarketPage extends BasePage {
 
     @Step("Change category on {0}")
     public void changeSection(String category) {
-//        getChromeDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-//        checkElementOnPage(allCategories);
-//        Assert.assertTrue("Не найдено поле для выбора всех категорий", allCategories.isDisplayed());
-//        allCategories.click();
-//        WebElement allCategories = getChromeDriver().findElementByXPath("//*[contains(text(), 'Все категории')]");
-//        getChromeDriver().manage().timeouts().implicitlyWait(8, TimeUnit.SECONDS);
-//        allCategories.click();
+        try{
+            allCategories.click();
+        }catch (WebDriverException e){
+            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+            executor.executeScript("arguments[0].click()", allCategories);
+        }
+
         WebElement categoryElement = getChromeDriver().findElementByXPath("//*[contains(text(), '" + category + "')]");
         checkElementOnPage(categoryElement);
-//        getChromeDriver().manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        categoryElement.click();
+        try{
+            categoryElement.click();
+        }catch (WebDriverException e){
+            JavascriptExecutor executor = (JavascriptExecutor) getChromeDriver();
+            executor.executeScript("arguments[0].click()", categoryElement);
+        }
+//        categoryElement.click();
     }
 }

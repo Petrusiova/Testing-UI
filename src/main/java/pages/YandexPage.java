@@ -6,8 +6,6 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
-
 public class YandexPage extends BasePage{
 
     @FindBy(id = "text")
@@ -33,7 +31,7 @@ public class YandexPage extends BasePage{
         ChromeDriver driver = getChromeDriver();
         Assert.assertTrue("Среди поисковой выдачи нет страницы Яндекс Маркета", pointButton.isDisplayed());
         pointButton.click();
-        closeFirstWindow();
+        closePreviousWindow();
         Assert.assertEquals("Закрытие предыдущей страницы не произошло",
                 1, driver.getWindowHandles().size());
     }
