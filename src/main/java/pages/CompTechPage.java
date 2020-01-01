@@ -66,18 +66,18 @@ public class CompTechPage extends BasePage {
         checkElementOnPage(showCount);
 //            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         clickElement(showCount);
-        getChromeDriver().findElementByXPath("//span[contains(text(), 'Показывать по 12')]").click();
+        clickElement(getChromeDriver().findElementByXPath("//span[contains(text(), 'Показывать по 12')]"));
     }
 
     @Step("Change shops without included")
     public void changeShops(List<String> excludedVendors) {
         waitFor(10);
-        By allShops = By.xpath("//*[@id=\"search-prepack\"]//div[30]/div/div/fieldset/footer/button");
+        By allShops = By.xpath("//*[@id=\"search-prepack\"]//div[30]//button");
         checkElementOnPage(allShops);
         waitFor(10);
         clickElement(getChromeDriver().findElement(allShops));
         scrollElementsAndClick(
-                "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]/div/label/div/span", excludedVendors, new ArrayList<>());
+                "//*[@id=\"search-prepack\"]//div[2]/ul/li[*]//span", excludedVendors, new ArrayList<>());
         getChromeDriver().findElement(allShops).click();
     }
 
