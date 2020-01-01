@@ -8,7 +8,7 @@ public class YandexSearchTest extends YandexSearchSteps {
     @Test
     @Description("Тест для проверки перехода на Санкт-Петербургский Яндекс Маркет")
     public void open() {
-        String filePath = "C:\\Users\\Olia\\Desktop\\parsing.xml";
+        String filePath = "C:\\Users\\Olia\\Test3\\parsing.xml";
         String rating = getNodeAttributes(filePath, "Excluded_vendors", 0, "rating");
         String maxPrice = searchElements(filePath, "Price").get(0).trim();
         List<String> manufacturers = searchElements(filePath, "Name");

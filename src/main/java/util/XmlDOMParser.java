@@ -17,11 +17,11 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DOMExample {
+public class XmlDOMParser {
 
     private static Document document;
 
-    public DOMExample(String filePath) {
+    public XmlDOMParser(String filePath) {
         try {
             // Получение фабрики, чтобы после получить билдер документов.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

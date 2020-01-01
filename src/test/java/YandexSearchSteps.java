@@ -4,7 +4,7 @@ import pages.BasePage;
 import pages.CompTechPage;
 import pages.MarketPage;
 import pages.YandexPage;
-import util.DOMExample;
+import util.XmlDOMParser;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -51,28 +51,28 @@ public class YandexSearchSteps extends BasePage {
 
     @Step ("Search max price in XML")
     public List<String> searchMaxPrice(String filePath, String tagName, String tagValue, String childTagName){
-        List<String> elements = new DOMExample(filePath).getListByNeighbourValue(tagName, tagValue, childTagName);
+        List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(tagName, tagValue, childTagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
         return elements;
     }
 
     @Step("SearchProducerInXML")
     public List<String> searchElements(String filePath, String tagName){
-        List<String> elements = new DOMExample(filePath).getListElementsByTagName(tagName);
+        List<String> elements = new XmlDOMParser(filePath).getListElementsByTagName(tagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
         return elements;
     }
 
     public String getNodeAttributes(String filePath, String tagName, int nodeIndex, String attrName){
         Assert.assertNotNull("Невозможно вычислить значение атрибута с именем null", attrName);
-        String attribute = new DOMExample(filePath).getNodeAttributes(tagName, nodeIndex).getNamedItem(attrName).getNodeValue();
+        String attribute = new XmlDOMParser(filePath).getNodeAttributes(tagName, nodeIndex).getNamedItem(attrName).getNodeValue();
         Assert.assertNotNull("Не найден атрибут с именем " + attrName, attribute);
         return attribute;
     }
 
     @Step ("SearchValueInXML")
     public List<String> searchValue(String filePath, String neighbourTag, String neighbourValue, String childTag){
-        List<String> elements = new DOMExample(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
+        List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
         Assert.assertFalse("Список значений тегов " + childTag + " пустой", elements.isEmpty());
         return elements;
     }
