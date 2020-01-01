@@ -7,10 +7,10 @@ import org.openqa.selenium.support.FindBy;
 
 public class MarketPage extends BasePage {
 
-    @FindBy(xpath = "//*[contains(text(), 'Нет, другой')]")
+    @FindBy(xpath = "//div[2]/div[2]/span")
     private WebElement answerNo;
 
-    @FindBy(xpath = "//*[@class=\"region-suggest i-bem region-suggest_js_inited\"]")
+    @FindBy(xpath = "//div[1]/span/input")
     private WebElement region;
 
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
@@ -21,7 +21,7 @@ public class MarketPage extends BasePage {
 
     public void anotherCity() {
         Assert.assertTrue("Не найдена кнопка выбора другого города", answerNo.isDisplayed());
-        answerNo.click();
+        clickElement(answerNo);
     }
 
     @Step("Смена города на {0}")

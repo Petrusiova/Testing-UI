@@ -7,6 +7,7 @@ import pages.YandexPage;
 import util.XmlDOMParser;
 
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 public class YandexSearchSteps extends BasePage {
@@ -75,6 +76,16 @@ public class YandexSearchSteps extends BasePage {
         List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
         Assert.assertFalse("Список значений тегов " + childTag + " пустой", elements.isEmpty());
         return elements;
+    }
+
+    @Step("Make a screenShot")
+    public String screenShot(){
+        return makeScreenShot();
+    }
+
+    @Step("Get notebook characteristics")
+    public Map<String, String> getCharacteristics(String...chars){
+        return new CompTechPage().getChars(chars);
     }
 
 }

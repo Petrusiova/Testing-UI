@@ -7,8 +7,7 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CompTechPage extends BasePage {
@@ -66,7 +65,9 @@ public class CompTechPage extends BasePage {
         checkElementOnPage(showCount);
 //            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         clickElement(showCount);
-        clickElement(getChromeDriver().findElementByXPath("//span[contains(text(), 'Показывать по 12')]"));
+        String twelve = "//span[contains(text(), 'Показывать по 12')]";
+        checkElementOnPage(By.xpath(twelve));
+        clickElement(getChromeDriver().findElementByXPath(twelve));
     }
 
     @Step("Change shops without included")
@@ -129,7 +130,7 @@ public class CompTechPage extends BasePage {
     private void chooseRating(String xPath) {
         WebElement rating = getChromeDriver().findElementByXPath(xPath);
         checkElementOnPage(rating);
-        rating.click();
+        clickElement(rating);
     }
 
     public void sortBy(String value) {
@@ -145,7 +146,7 @@ public class CompTechPage extends BasePage {
         // Третий элмент
         By noteBook = By.xpath("//div[3]//h3/a");
         checkElementOnPage(noteBook);
-        getChromeDriver().findElement(noteBook).click();
+        clickElement(getChromeDriver().findElement(noteBook));
         closePreviousWindow();
     }
 
@@ -159,5 +160,13 @@ public class CompTechPage extends BasePage {
         By chars = By.xpath("//*[@data-name=\"spec\"]");
         checkElementOnPage(chars);
         getChromeDriver().findElement(chars).click();
+    }
+
+    @Step("ЗАМЕНИТЬ НА НОРМАЛЬНОЕ НАЗВАНИЕ ШАГА")
+    public Map<String, String> getChars(String...characts){
+        Map<String, String> map = new HashMap<>();
+        Arrays.asList(characts).forEach(item -> map.put(item,
+                getChromeDriver().findElementByXPath("//*[contains(text(), '" + item + "')]/../../dd/span").getText().split(",")[0]));
+        return map;
     }
 }

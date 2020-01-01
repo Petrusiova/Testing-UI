@@ -1,19 +1,19 @@
 package pages;
 
 import io.qameta.allure.Step;
+import org.apache.commons.io.FileUtils;
 import org.junit.After;
 import org.junit.Assert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriverException;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import util.AutoTestException;
 import util.PropertyManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
@@ -50,7 +50,11 @@ public class BasePage {
         chromeDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
         WebDriverWait wait = new WebDriverWait(chromeDriver, 40);
         wait.until(ExpectedConditions.elementToBeClickable(by));
-        Assert.assertTrue("Элемент" + by + " отсутствует на странице", chromeDriver.findElement(by).isDisplayed());
+        try {
+            Assert.assertTrue("Элемент" + by + " отсутствует на странице", chromeDriver.findElement(by).isDisplayed());
+        } catch (StaleElementReferenceException e){
+            throw new AutoTestException("Данный элемент не был найден на странице" + by);
+        }
     }
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
@@ -62,22 +66,23 @@ public class BasePage {
         Assert.assertTrue("Элемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
     }
 
+    @Step("Making a screenShot")
+    public String makeScreenShot(){
+        File screenshot = ((TakesScreenshot) chromeDriver).
+                getScreenshotAs(OutputType.FILE);
+        String path = "./target/screenshots/" + screenshot.getName();
+        try {
+            FileUtils.copyFile(screenshot, new File(path));
+        } catch (IOException e) {
+            throw new AutoTestException("Невозможно сделать скриншот экрана");
+        }
+        return path;
+    }
+
     public void checkIsInvisible(By by){
         new WebDriverWait(getChromeDriver(), 10)
                 .until(ExpectedConditions.invisibilityOf(getChromeDriver().findElement(by)));
     }
-
-    public WebElement findElement(By by, int timeOut) {
-        WebDriverWait wait = new WebDriverWait(chromeDriver, timeOut);
-        WebElement webElement = null;
-
-        try {
-            webElement = wait.until(ExpectedConditions.presenceOfElementLocated(by));
-        } catch (Exception ex) {
-        }
-        return webElement;
-    }
-
 
     @After
     @Step("Закрываем браузер")

@@ -2,6 +2,7 @@ import io.qameta.allure.Description;
 import org.junit.Test;
 
 import java.util.List;
+import java.util.Map;
 
 public class YandexSearchTest extends YandexSearchSteps {
 
@@ -21,11 +22,12 @@ public class YandexSearchTest extends YandexSearchSteps {
 //            }
 //        }
 
-
         openPageRedirectAndCheck("http://yandex.ru", "Яндекс маркет");
         changeCityAndCategory("сан", "Санкт-Петербург", "Компьютерная техника");
         changeSection("Ноутбуки", manufacturers.get(0), minValues.get(0), maxValues.get(0));
         changeShops(excludedVendors, rating, "по цене", manufacturers.get(0));
+        makeScreenShot();
+        Map<String, String> characteristics = getCharacteristics("Экран", "Вес");
         String s = "";
     }
 }
