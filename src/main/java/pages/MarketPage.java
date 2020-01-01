@@ -7,10 +7,10 @@ import org.openqa.selenium.support.FindBy;
 
 public class MarketPage extends BasePage {
 
-    @FindBy(xpath = "//div[2]/div[2]/span")
+    @FindBy(xpath = "//*[contains(text(), 'Нет, другой')]")
     private WebElement answerNo;
 
-    @FindBy(xpath = "//div[1]/span/input")
+    @FindBy(xpath = "//*[@class=\"region-suggest i-bem region-suggest_js_inited\"]")
     private WebElement region;
 
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
