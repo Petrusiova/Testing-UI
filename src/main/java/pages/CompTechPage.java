@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CompTechPage extends BasePage {
 
-    @FindBy(xpath = "//*[@id=\"search-prepack\"]//div[4]/div/div/fieldset/footer/button")
+    @FindBy(xpath = "//*[@data-autotest-id=\"7893318\"]//button")
     private WebElement allProducers;
 
     @FindBy(xpath = "//*[@id=\"glpricefrom\"]")
@@ -22,7 +22,7 @@ public class CompTechPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"glpriceto\"]")
     private WebElement highestPrice;
 
-    @FindBy(xpath = "//div[2]/div/div[3]/span")
+    @FindBy(xpath = "//*[@role=\"listbox\"]")
     private WebElement showCount;
 
 
@@ -142,7 +142,8 @@ public class CompTechPage extends BasePage {
     @Step("Choose third notebook on page")
     public void chooseThirdElement() {
         checkIsInvisible(By.xpath("//*[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
-        By noteBook = By.xpath("//div[6]/div[2]/div[1]/div[2]/div/div[1]/div[3]/div[4]/div[1]/h3/a");
+        // Третий элмент
+        By noteBook = By.xpath("//div[3]//h3/a");
         checkElementOnPage(noteBook);
         getChromeDriver().findElement(noteBook).click();
         closePreviousWindow();
@@ -154,8 +155,8 @@ public class CompTechPage extends BasePage {
         checkElementOnPage(producer);
         Assert.assertEquals("Производитель не соответствует ожидаемому", manufacturer,
                 getChromeDriver().findElement(producer).getText());
-
-        By chars = By.xpath("//div[8]/div/div/div/ul/li[2]/a");
+        // "Характеристики"
+        By chars = By.xpath("//*[@data-name=\"spec\"]");
         checkElementOnPage(chars);
         getChromeDriver().findElement(chars).click();
     }
