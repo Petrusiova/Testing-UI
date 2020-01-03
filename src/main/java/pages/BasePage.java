@@ -59,10 +59,14 @@ public class BasePage {
 
     @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(WebElement webElement) {
-        chromeDriver.manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
-        chromeDriver.manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().pageLoadTimeout(35, TimeUnit.SECONDS);
+        chromeDriver.manage().timeouts().setScriptTimeout(35, TimeUnit.SECONDS);
         WebDriverWait wait = new WebDriverWait(chromeDriver, 35);
-        wait.until(ExpectedConditions.elementToBeClickable(webElement));
+        try {
+            wait.until(ExpectedConditions.elementToBeClickable(webElement));
+        } catch (StaleElementReferenceException e){
+            throw new AutoTestException("Элемент не находится на странице " + webElement);
+        }
         Assert.assertTrue("Элемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
     }
 
@@ -80,8 +84,10 @@ public class BasePage {
     }
 
     public void checkIsInvisible(By by){
-        new WebDriverWait(getChromeDriver(), 10)
-                .until(ExpectedConditions.invisibilityOf(getChromeDriver().findElement(by)));
+        try {
+            new WebDriverWait(getChromeDriver(), 10)
+                    .until(ExpectedConditions.invisibilityOf(getChromeDriver().findElement(by)));
+        } catch (NoSuchElementException e){}
     }
 
     @After

@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 public class CompTechPage extends BasePage {
 
-    @FindBy(xpath = "//*[@data-autotest-id=\"7893318\"]//button")
+    @FindBy(xpath = "//legend[contains(text(), 'Производитель')]/..//button")
     private WebElement allProducers;
 
     @FindBy(xpath = "//*[@id=\"glpricefrom\"]")
@@ -36,13 +36,26 @@ public class CompTechPage extends BasePage {
     public void changeProducer(String name) {
         checkElementOnPage(allProducers);
         allProducers.click();
-        String fieldXPath = "//*[@id=\"7893318-suggester\"]";
+        String fieldXPath = "//legend[contains(text(), \"Производитель\")]/..//input[@type='text']";
+        try {
+            boolean isTextInputDisplayed = !getChromeDriver().findElementByXPath(fieldXPath).isDisplayed();
+        } catch (Exception e){
+            allProducers.click();
+        }
         checkElementOnPage(By.xpath(fieldXPath));
         WebElement searchField = getChromeDriver().findElementByXPath(fieldXPath);
         searchField.click();
+        searchField.clear();
         searchField.sendKeys(name);
         WebElement producer = getChromeDriver().findElementByXPath("//span[contains(text(), '" + name + "')]");
         Assert.assertTrue("Не найден подходящий производитель", producer.isDisplayed());
+        producer.click();
+    }
+
+    @Step("Unselect producer")
+    public void cancelProducer(String name){
+        WebElement producer = getChromeDriver().findElementByXPath("//span[text()='" + name + "']");
+        checkElementOnPage(producer);
         producer.click();
     }
 
@@ -50,6 +63,7 @@ public class CompTechPage extends BasePage {
     public void changeLowestPrice(String value) {
         checkElementOnPage(lowestPrice);
         lowestPrice.click();
+        lowestPrice.clear();
         lowestPrice.sendKeys(value);
     }
 
@@ -57,6 +71,7 @@ public class CompTechPage extends BasePage {
     public void changeHighestPrice(String value) {
         checkElementOnPage(highestPrice);
         highestPrice.click();
+        highestPrice.clear();
         highestPrice.sendKeys(value);
     }
 
@@ -147,11 +162,15 @@ public class CompTechPage extends BasePage {
         By noteBook = By.xpath("//div[3]//h3/a");
         checkElementOnPage(noteBook);
         clickElement(getChromeDriver().findElement(noteBook));
-        closePreviousWindow();
+//        closePreviousWindow();
+        ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
+        getChromeDriver().switchTo().window(tabs.get(1));
     }
 
     @Step("Checking producer is chosen")
     public void validateManufacturer(String manufacturer){
+        ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
+        getChromeDriver().switchTo().window(tabs.get(1));
         By producer = By.xpath("//*[@id=\"n-breadcrumbs\"]/li[2]/a/span");
         checkElementOnPage(producer);
         Assert.assertEquals("Производитель не соответствует ожидаемому", manufacturer,

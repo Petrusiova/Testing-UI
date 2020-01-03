@@ -40,6 +40,7 @@ public class MarketPage extends BasePage {
 
     @Step("Change category on {0}")
     public void changeSection(String category) {
+        checkElementOnPage(allCategories);
         clickElement(allCategories);
         WebElement categoryElement = getChromeDriver().findElementByXPath("//*[contains(text(), '" + category + "')]");
         checkElementOnPage(categoryElement);

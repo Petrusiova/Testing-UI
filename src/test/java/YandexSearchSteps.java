@@ -6,6 +6,7 @@ import pages.MarketPage;
 import pages.YandexPage;
 import util.XmlDOMParser;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -31,30 +32,37 @@ public class YandexSearchSteps extends BasePage {
     }
 
     @Step("Change section on {0}")
-    public void changeSection(String section, String name, String min, String max) {
+    public void changeSection(String section) {
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeCategory(section);
-        compTechPage.changeProducer(name);
-        compTechPage.changeLowestPrice(min);
-        compTechPage.changeHighestPrice(max);
         compTechPage.changeShowedCount();
     }
 
+    @Step("Change manufacturer")
+    public  void changeManufacturer(String name, String min, String max, String manufacturer){
+        CompTechPage compTechPage = new CompTechPage();
+        compTechPage.changeProducer(name);
+        compTechPage.changeLowestPrice(min);
+        compTechPage.changeHighestPrice(max);
+        compTechPage.chooseThirdElement();
+        ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
+        getChromeDriver().switchTo().window(tabs.get(1));
+        compTechPage.validateManufacturer(manufacturer);
+    }
+
     @Step("Change shops")
-    public void changeShops(List<String> excludedVendors, String rating, String value, String manufacturer){
+    public void changeShops(List<String> excludedVendors, String rating, String value){
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeShops(excludedVendors);
         compTechPage.changeRating(rating);
         compTechPage.sortBy(value);
-        compTechPage.chooseThirdElement();
-        compTechPage.validateManufacturer(manufacturer);
     }
 
     @Step ("Search max price in XML")
-    public List<String> searchMaxPrice(String filePath, String tagName, String tagValue, String childTagName){
-        List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(tagName, tagValue, childTagName);
-        Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
-        return elements;
+    public String searchPriceValue(String filePath, String tagName, String tagValue, String childTagName){
+        String element = new XmlDOMParser(filePath).getStringByNeighbourValue(tagName, tagValue, childTagName);
+        Assert.assertFalse("Список значений тегов " + tagName + " пустой", element.isEmpty());
+        return element;
     }
 
     @Step("SearchProducerInXML")
@@ -72,20 +80,25 @@ public class YandexSearchSteps extends BasePage {
     }
 
     @Step ("SearchValueInXML")
-    public List<String> searchValue(String filePath, String neighbourTag, String neighbourValue, String childTag){
+    public List<String> searchValues(String filePath, String neighbourTag, String neighbourValue, String childTag){
         List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
         Assert.assertFalse("Список значений тегов " + childTag + " пустой", elements.isEmpty());
         return elements;
     }
 
-    @Step("Make a screenShot")
-    public String screenShot(){
-        return makeScreenShot();
-    }
-
     @Step("Get notebook characteristics")
     public Map<String, String> getCharacteristics(String...chars){
         return new CompTechPage().getChars(chars);
+    }
+
+    @Step("Unselect producer")
+    public void unselectManufacturer(String name){
+        ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
+        getChromeDriver().switchTo().window(tabs.get(1));
+        getChromeDriver().close();
+        getChromeDriver().switchTo().window(tabs.get(0));
+        CompTechPage compTechPage = new CompTechPage();
+        compTechPage.cancelProducer(name);
     }
 
 }

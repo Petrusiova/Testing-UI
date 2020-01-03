@@ -29,7 +29,7 @@ public class YandexPage extends BasePage{
 
     public void redirectToMarket() {
         ChromeDriver driver = getChromeDriver();
-        Assert.assertTrue("Среди поисковой выдачи нет страницы Яндекс Маркета", pointButton.isDisplayed());
+        checkElementOnPage(pointButton);
         pointButton.click();
         closePreviousWindow();
         Assert.assertEquals("Закрытие предыдущей страницы не произошло",
