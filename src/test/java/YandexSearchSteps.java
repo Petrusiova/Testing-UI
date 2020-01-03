@@ -22,7 +22,7 @@ public class YandexSearchSteps extends BasePage {
         page.redirectToMarket();
     }
 
-    @Step("Change city by first three letters {0} and category on {2}")
+    @Step("Выполняем поиск города по первым трем буквам {0} и категорию {2}")
     public void changeCityAndCategory(String firstLetters, String fullName, String category) {
         MarketPage page = new MarketPage();
         page.anotherCity();
@@ -31,14 +31,14 @@ public class YandexSearchSteps extends BasePage {
         page.changeSection(category);
     }
 
-    @Step("Change section on {0}")
+    @Step("Производим выбор секции: {0}")
     public void changeSection(String section) {
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeCategory(section);
         compTechPage.changeShowedCount();
     }
 
-    @Step("Change manufacturer")
+    @Step("Производим выбор производителя")
     public  void changeManufacturer(String name, String min, String max, String manufacturer){
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeProducer(name);
@@ -50,7 +50,7 @@ public class YandexSearchSteps extends BasePage {
         compTechPage.validateManufacturer(manufacturer);
     }
 
-    @Step("Change shops")
+    @Step("Производим выбор подходящих магазинов")
     public void changeShops(List<String> excludedVendors, String rating, String value){
         CompTechPage compTechPage = new CompTechPage();
         compTechPage.changeShops(excludedVendors);
@@ -58,14 +58,14 @@ public class YandexSearchSteps extends BasePage {
         compTechPage.sortBy(value);
     }
 
-    @Step ("Search max price in XML")
+    @Step ("Находим цену в xml-файле")
     public String searchPriceValue(String filePath, String tagName, String tagValue, String childTagName){
         String element = new XmlDOMParser(filePath).getStringByNeighbourValue(tagName, tagValue, childTagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", element.isEmpty());
         return element;
     }
 
-    @Step("SearchProducerInXML")
+    @Step("Находим производителя в xml-файле")
     public List<String> searchElements(String filePath, String tagName){
         List<String> elements = new XmlDOMParser(filePath).getListElementsByTagName(tagName);
         Assert.assertFalse("Список значений тегов " + tagName + " пустой", elements.isEmpty());
@@ -79,12 +79,12 @@ public class YandexSearchSteps extends BasePage {
         return attribute;
     }
 
-    @Step("Get notebook characteristics")
+    @Step("Находим характеристики выбранного ноутбука")
     public Map<String, String> getCharacteristics(String...chars){
         return new CompTechPage().getChars(chars);
     }
 
-    @Step("Unselect producer")
+    @Step("Очищаем выборку производителей")
     public void unselectManufacturer(String name){
         ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
         getChromeDriver().switchTo().window(tabs.get(1));
@@ -94,4 +94,20 @@ public class YandexSearchSteps extends BasePage {
         compTechPage.cancelProducer(name);
     }
 
+    @Step("Задаем критерии и узнаем характеристики для производителя: {0}")
+    public Map<String, String> check(String filePath, String manufacturer, String maxPrice) {
+        String min = searchPriceValue(filePath, "Name", manufacturer, "Min");
+        String max = searchPriceValue(filePath, "Name", manufacturer, "Max");
+        if (Long.valueOf(max) > Long.valueOf(maxPrice)) {
+            max = maxPrice;
+        }
+
+        changeManufacturer(manufacturer, min, max, manufacturer);
+        String path = makeScreenShot();
+        Map<String, String> characteristics = getCharacteristics("Экран", "Вес");
+        characteristics.put("Производитель", manufacturer);
+        characteristics.put("Имя файла", path);
+        unselectManufacturer(manufacturer);
+        return characteristics;
+    }
 }

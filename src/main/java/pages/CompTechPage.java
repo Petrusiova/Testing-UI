@@ -25,14 +25,14 @@ public class CompTechPage extends BasePage {
     private WebElement showCount;
 
 
-    @Step("Change product category on {0}")
+    @Step("Выбираем подкатегорию {0}")
     public void changeCategory(String section) {
         WebElement ourSection = getChromeDriver().findElementByXPath(".//a[text() = '" + section + "']");
         checkElementOnPage(ourSection);
         ourSection.click();
     }
 
-    @Step("Select producer filter: {0}")
+    @Step("Выбираем производтеля: {0}")
     public void changeProducer(String name) {
         checkElementOnPage(allProducers);
         allProducers.click();
@@ -52,14 +52,14 @@ public class CompTechPage extends BasePage {
         producer.click();
     }
 
-    @Step("Unselect producer")
+    @Step("Снимаем флажок выбора производителя")
     public void cancelProducer(String name){
         WebElement producer = getChromeDriver().findElementByXPath("//span[text()='" + name + "']");
         checkElementOnPage(producer);
         producer.click();
     }
 
-    @Step("Change lowest price")
+    @Step("Вибираем инимальную цену")
     public void changeLowestPrice(String value) {
         checkElementOnPage(lowestPrice);
         lowestPrice.click();
@@ -67,7 +67,7 @@ public class CompTechPage extends BasePage {
         lowestPrice.sendKeys(value);
     }
 
-    @Step("Change highest price")
+    @Step("Выбираем максимальную цену")
     public void changeHighestPrice(String value) {
         checkElementOnPage(highestPrice);
         highestPrice.click();
@@ -75,7 +75,7 @@ public class CompTechPage extends BasePage {
         highestPrice.sendKeys(value);
     }
 
-    @Step("Change count of showed items")
+    @Step("Выбираем количество отображаемых элементов на странице")
     public void changeShowedCount() {
         checkElementOnPage(showCount);
 //            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
@@ -85,7 +85,7 @@ public class CompTechPage extends BasePage {
         clickElement(getChromeDriver().findElementByXPath(twelve));
     }
 
-    @Step("Change shops without included")
+    @Step("Выбираем магазины, исключая нежелательные")
     public void changeShops(List<String> excludedVendors) {
         waitFor(10);
         By allShops = By.xpath("//*[@id=\"search-prepack\"]//div[30]//button");
@@ -129,7 +129,7 @@ public class CompTechPage extends BasePage {
         }
     }
 
-    @Step("Change rating")
+    @Step("Выбираем рейтинг магазинов")
     public void changeRating(String rating) {
         getChromeDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         getChromeDriver().manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
@@ -148,6 +148,7 @@ public class CompTechPage extends BasePage {
         clickElement(rating);
     }
 
+    @Step("Выбираем сортировку")
     public void sortBy(String value) {
         WebElement sort = getChromeDriver().findElementByXPath("//*[contains(text(), '" + value + "')]");
         checkElementOnPage(sort);
@@ -155,7 +156,7 @@ public class CompTechPage extends BasePage {
         sort.click();
     }
 
-    @Step("Choose third notebook on page")
+    @Step("Выбираем третий элемент на странице")
     public void chooseThirdElement() {
         checkIsInvisible(By.xpath("//*[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         // Третий элмент
@@ -167,7 +168,7 @@ public class CompTechPage extends BasePage {
         getChromeDriver().switchTo().window(tabs.get(1));
     }
 
-    @Step("Checking producer is chosen")
+    @Step("Проверяем производителя на соответствие требованиям")
     public void validateManufacturer(String manufacturer){
         ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
         getChromeDriver().switchTo().window(tabs.get(1));
@@ -181,7 +182,7 @@ public class CompTechPage extends BasePage {
         getChromeDriver().findElement(chars).click();
     }
 
-    @Step("ЗАМЕНИТЬ НА НОРМАЛЬНОЕ НАЗВАНИЕ ШАГА")
+    @Step("Собираем характеристики ноутбука")
     public Map<String, String> getChars(String...characts){
         Map<String, String> map = new HashMap<>();
         Arrays.asList(characts).forEach(item -> map.put(item,

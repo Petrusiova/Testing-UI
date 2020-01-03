@@ -41,27 +41,27 @@ public class BasePage {
         }
     }
 
-    @Step("РџРµСЂРµС…РѕРґРёРј РЅР° СЃС‚СЂР°РЅРёС†Сѓ РїРѕ СЃСЃС‹Р»РєРµ {0}")
+    @Step("Переходим на страницу по ссылке {0}")
     public void goTo(String url) {
         chromeDriver.manage().window().maximize();
         chromeDriver.get(url);
 
     }
 
-    @Step("РџСЂРѕРІРµСЂСЏРµРј Р·Р°РіСЂСѓР·РёР»СЃСЏ Р»Рё РЅРµРѕР±С…РѕРґРёРјС‹Р№ СЌР»РµРјРµРЅС‚ РЅР° СЃС‚СЂР°РЅРёС†Рµ")
+    @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(By by) {
         chromeDriver.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
         chromeDriver.manage().timeouts().setScriptTimeout(10, TimeUnit.SECONDS);
         WebDriverWait wait = new WebDriverWait(chromeDriver, 40);
         wait.until(ExpectedConditions.elementToBeClickable(by));
         try {
-            Assert.assertTrue("Р­Р»РµРјРµРЅС‚" + by + " РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РЅР° СЃС‚СЂР°РЅРёС†Рµ", chromeDriver.findElement(by).isDisplayed());
+            Assert.assertTrue("Элемент" + by + " отсутствует на странице", chromeDriver.findElement(by).isDisplayed());
         } catch (StaleElementReferenceException e) {
-            throw new AutoTestException("Р”Р°РЅРЅС‹Р№ СЌР»РµРјРµРЅС‚ РЅРµ Р±С‹Р» РЅР°Р№РґРµРЅ РЅР° СЃС‚СЂР°РЅРёС†Рµ" + by);
+            throw new AutoTestException("Данный элемент не был найден на странице" + by);
         }
     }
 
-    @Step("РџСЂРѕРІРµСЂСЏРµРј Р·Р°РіСЂСѓР·РёР»СЃСЏ Р»Рё РЅРµРѕР±С…РѕРґРёРјС‹Р№ СЌР»РµРјРµРЅС‚ РЅР° СЃС‚СЂР°РЅРёС†Рµ")
+    @Step("Проверяем загрузился ли необходимый элемент на странице")
     public void checkElementOnPage(WebElement webElement) {
         chromeDriver.manage().timeouts().pageLoadTimeout(35, TimeUnit.SECONDS);
         chromeDriver.manage().timeouts().setScriptTimeout(35, TimeUnit.SECONDS);
@@ -69,12 +69,12 @@ public class BasePage {
         try {
             wait.until(ExpectedConditions.elementToBeClickable(webElement));
         } catch (StaleElementReferenceException e) {
-            throw new AutoTestException("Р­Р»РµРјРµРЅС‚ РЅРµ РЅР°С…РѕРґРёС‚СЃСЏ РЅР° СЃС‚СЂР°РЅРёС†Рµ " + webElement);
+            throw new AutoTestException("Элемент не находится на странице " + webElement);
         }
-        Assert.assertTrue("Р­Р»РµРјРµРЅС‚" + webElement + " РѕС‚СЃСѓС‚СЃС‚РІСѓРµС‚ РЅР° СЃС‚СЂР°РЅРёС†Рµ", webElement.isDisplayed());
+        Assert.assertTrue("Элемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
     }
 
-    @Step("Making a screenShot")
+    @Step("Делаем скриншот страницы с ноутбуком")
     public String makeScreenShot() {
         File screenshot = ((TakesScreenshot) chromeDriver).
                 getScreenshotAs(OutputType.FILE);
@@ -82,13 +82,13 @@ public class BasePage {
         try {
             FileUtils.copyFile(screenshot, new File(path));
         } catch (IOException e) {
-            throw new AutoTestException("РќРµРІРѕР·РјРѕР¶РЅРѕ СЃРґРµР»Р°С‚СЊ СЃРєСЂРёРЅС€РѕС‚ СЌРєСЂР°РЅР°");
+            throw new AutoTestException("Невозможно сделать скриншот экрана");
         }
         return path;
     }
 
     @Attachment(value = "Page screenshot", type = "image/png")
-    protected byte[] attachShot(String path) throws IOException {
+    protected byte[] attachScreenShot(String path) throws IOException {
         BufferedImage originalImage = ImageIO.read(new File(path));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ImageIO.write( originalImage, "png", baos);
@@ -98,6 +98,7 @@ public class BasePage {
         return imageInByte;
     }
 
+    @Step("Проверяем, что ненужный нам элемент не отображается")
     public void checkIsInvisible(By by) {
         try {
             new WebDriverWait(getChromeDriver(), 10)
@@ -107,7 +108,7 @@ public class BasePage {
     }
 
     @After
-    @Step("Р—Р°РєСЂС‹РІР°РµРј Р±СЂР°СѓР·РµСЂ")
+    @Step("Закрываем браузер")
     public void closeBrowser() {
         if (chromeDriver != null) {
             chromeDriver.close();

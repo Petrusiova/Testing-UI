@@ -38,7 +38,7 @@ public class MarketPage extends BasePage {
         region.sendKeys(Keys.ENTER);
     }
 
-    @Step("Change category on {0}")
+    @Step("Изменяем категорию на: {0}")
     public void changeSection(String category) {
         checkElementOnPage(allCategories);
         clickElement(allCategories);

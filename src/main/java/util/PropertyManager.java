@@ -23,7 +23,7 @@ public class PropertyManager {
             FileInputStream file = new FileInputStream(".\\src\\test\\resources\\application.properties");
             prop.load(file);
         } catch (IOException e) {
-            System.out.println("Configuration properties file cannot be found");
+            System.out.println("Не найден файл с пропертями");
         }
         driverPath = prop.getProperty("webdriver.chrome.driver");
     }
