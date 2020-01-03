@@ -68,10 +68,10 @@ public class BasePage {
         WebDriverWait wait = new WebDriverWait(chromeDriver, 35);
         try {
             wait.until(ExpectedConditions.elementToBeClickable(webElement));
+            Assert.assertTrue("Ёлемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
         } catch (StaleElementReferenceException e) {
             throw new AutoTestException("Ёлемент не находитс€ на странице " + webElement);
         }
-        Assert.assertTrue("Ёлемент" + webElement + " отсутствует на странице", webElement.isDisplayed());
     }
 
     @Step("ƒелаем скриншот страницы с ноутбуком")
@@ -91,7 +91,7 @@ public class BasePage {
     protected byte[] attachScreenShot(String path) throws IOException {
         BufferedImage originalImage = ImageIO.read(new File(path));
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        ImageIO.write( originalImage, "png", baos);
+        ImageIO.write(originalImage, "png", baos);
         baos.flush();
         byte[] imageInByte = baos.toByteArray();
         baos.close();
@@ -104,6 +104,7 @@ public class BasePage {
             new WebDriverWait(getChromeDriver(), 10)
                     .until(ExpectedConditions.invisibilityOf(getChromeDriver().findElement(by)));
         } catch (NoSuchElementException e) {
+            e.printStackTrace();
         }
     }
 
