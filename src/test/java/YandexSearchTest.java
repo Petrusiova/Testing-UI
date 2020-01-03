@@ -1,11 +1,6 @@
 import io.qameta.allure.Description;
 import org.junit.Test;
-import util.ImageFrame;
 
-import javax.imageio.ImageIO;
-import javax.swing.*;
-import java.awt.*;
-import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -44,18 +39,7 @@ public class YandexSearchTest extends YandexSearchSteps {
                 }
             }
         }
-
-        ImageIO.write(ImageIO.read(new File(ourMap.get("ָלÿ פאיכא"))), "png",
-                new File("./target/screenshots/result/"));
-
-        String path = ourMap.get("ָלÿ פאיכא");
-        EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                ImageFrame frame = new ImageFrame(path);
-                frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-                frame.setVisible(true);
-            }
-        });
+        attachShot(ourMap.get("ָלÿ פאיכא"));
     }
 
     public Map<String, String> check(String filePath, String manufacturer, String maxPrice) {
