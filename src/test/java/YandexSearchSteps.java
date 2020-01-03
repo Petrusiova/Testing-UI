@@ -79,13 +79,6 @@ public class YandexSearchSteps extends BasePage {
         return attribute;
     }
 
-    @Step ("SearchValueInXML")
-    public List<String> searchValues(String filePath, String neighbourTag, String neighbourValue, String childTag){
-        List<String> elements = new XmlDOMParser(filePath).getListByNeighbourValue(neighbourTag, neighbourValue, childTag);
-        Assert.assertFalse("Список значений тегов " + childTag + " пустой", elements.isEmpty());
-        return elements;
-    }
-
     @Step("Get notebook characteristics")
     public Map<String, String> getCharacteristics(String...chars){
         return new CompTechPage().getChars(chars);

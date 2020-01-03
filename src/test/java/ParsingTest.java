@@ -9,7 +9,7 @@ public class ParsingTest {
     @Test
     @Description("Тест для проверки парсера")
     public void parse() {
-        String filePath = "C:\\Users\\Olia\\Desktop\\parsing.xml";
+        String filePath = "parsing.xml";
         XmlDOMParser xmlDomParser = new XmlDOMParser(filePath);
         xmlDomParser.getListByNeighbourValue("Vendor", "microprice", "Vendor");
         xmlDomParser.getListByNeighbourAttrValue("Manufacturer", 0,"products", "pc", "Min");
