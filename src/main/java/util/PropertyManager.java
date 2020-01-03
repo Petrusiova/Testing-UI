@@ -20,7 +20,7 @@ public class PropertyManager {
         Properties prop = new Properties();
 
         try {
-            FileInputStream file = new FileInputStream("C:\\Users\\Olia\\test\\src\\test\\resources\\application.properties");
+            FileInputStream file = new FileInputStream(".\\src\\test\\resources\\application.properties");
             prop.load(file);
         } catch (IOException e) {
             System.out.println("Configuration properties file cannot be found");
