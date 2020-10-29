@@ -7,25 +7,34 @@ import org.openqa.selenium.support.FindBy;
 
 public class MarketPage extends BasePage {
 
-    @FindBy(xpath = "//div[2]/div[2]/span")
+    @FindBy(xpath = "//*[contains(text(),'Нет')]")
     private WebElement answerNo;
 
-    @FindBy(xpath = "//div[1]/span/input")
+    @FindBy(xpath = "//*[@title=\"Регион\"]/../..")
+    private WebElement regionChange;
+
+    @FindBy(xpath = "//input[@placeholder=\"Укажите другой регион\"]")
     private WebElement region;
 
     @FindBy(xpath = "//*[contains(text(),'Продолжить с новым регионом')]")
     private WebElement continueBtn;
 
-    @FindBy(xpath = "//*[contains(text(), 'Все категории')]")
+    @FindBy(xpath = "//button[@data-reactroot]")
     private WebElement allCategories;
 
     public void anotherCity() {
-        Assert.assertTrue("Не найдена кнопка выбора другого города", answerNo.isDisplayed());
-        clickElement(answerNo);
+        waitFor(10);
+        regionChange.click();
     }
 
     @Step("Смена города на {0}")
     public void changeCity(String city, String fullName) {
+        try{
+            region.isDisplayed();
+        }
+        catch (NoSuchElementException e){
+            regionChange.click();
+        }
         Assert.assertTrue("Не найдено поле для ввода региона", region.isDisplayed());
         region.clear();
         region.sendKeys(city);

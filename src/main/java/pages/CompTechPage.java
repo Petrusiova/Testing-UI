@@ -21,7 +21,7 @@ public class CompTechPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"glpriceto\"]")
     private WebElement highestPrice;
 
-    @FindBy(xpath = "//*[@role=\"listbox\"]")
+    @FindBy(xpath = "//button[contains(text(), 'Показывать по')]/../../..")
     private WebElement showCount;
 
 
@@ -80,7 +80,7 @@ public class CompTechPage extends BasePage {
         checkElementOnPage(showCount);
 //            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         clickElement(showCount);
-        String twelve = "//span[contains(text(), 'Показывать по 12')]";
+        String twelve = "//button[contains(text(), 'Показывать по 12')]";
         checkElementOnPage(By.xpath(twelve));
         clickElement(getChromeDriver().findElementByXPath(twelve));
     }
@@ -88,7 +88,7 @@ public class CompTechPage extends BasePage {
     @Step("Выбираем магазины, исключая нежелательные")
     public void changeShops(List<String> excludedVendors) {
         waitFor(10);
-        By allShops = By.xpath("//*[@id=\"search-prepack\"]//div[30]//button");
+        By allShops = By.xpath("//legend[contains(text(), 'Магазины')]/..//button");
         checkElementOnPage(allShops);
         waitFor(10);
         clickElement(getChromeDriver().findElement(allShops));
@@ -158,6 +158,7 @@ public class CompTechPage extends BasePage {
 
     @Step("Выбираем третий элемент на странице")
     public void chooseThirdElement() {
+        waitFor(10);
         checkIsInvisible(By.xpath("//*[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         // Третий элмент
         By noteBook = By.xpath("//div[3]//h3/a");
@@ -172,21 +173,18 @@ public class CompTechPage extends BasePage {
     public void validateManufacturer(String manufacturer){
         ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
         getChromeDriver().switchTo().window(tabs.get(1));
-        By producer = By.xpath("//*[@id=\"n-breadcrumbs\"]/li[2]/a/span");
-        checkElementOnPage(producer);
-        Assert.assertEquals("Производитель не соответствует ожидаемому", manufacturer,
-                getChromeDriver().findElement(producer).getText());
+
+        Assert.assertTrue("Производитель не соответствует ожидаемому",
+                getChromeDriver().findElement(By.xpath("//h1")).getText().contains("Ноутбук " + manufacturer));
         // "Характеристики"
-        By chars = By.xpath("//*[@data-name=\"spec\"]");
-        checkElementOnPage(chars);
-        getChromeDriver().findElement(chars).click();
+        getChromeDriver().findElement(By.xpath("//span[contains(text(), 'Характеристики')]")).click();
     }
 
     @Step("Собираем характеристики ноутбука")
     public Map<String, String> getChars(String...characts){
         Map<String, String> map = new HashMap<>();
         Arrays.asList(characts).forEach(item -> map.put(item,
-                getChromeDriver().findElementByXPath("//*[contains(text(), '" + item + "')]/../../dd/span").getText().split(",")[0]));
+                getChromeDriver().findElementByXPath("//span[text()='" + item + "']/../../../dd").getText().split(",")[0]));
         return map;
     }
 }
