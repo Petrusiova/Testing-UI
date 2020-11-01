@@ -32,7 +32,7 @@ public class CompTechPage extends BasePage {
         ourSection.click();
     }
 
-    @Step("Выбираем производтеля: {0}")
+    @Step("Выбираем производителя: {0}")
     public void changeProducer(String name) {
         checkElementOnPage(allProducers);
         allProducers.click();
@@ -59,7 +59,7 @@ public class CompTechPage extends BasePage {
         producer.click();
     }
 
-    @Step("Вибираем инимальную цену")
+    @Step("Выбираем минимальную цену")
     public void changeLowestPrice(String value) {
         checkElementOnPage(lowestPrice);
         lowestPrice.click();
