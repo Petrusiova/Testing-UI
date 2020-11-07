@@ -23,7 +23,7 @@ public class XmlDOMParser {
 
     public XmlDOMParser(String filePath) {
         try {
-            // Получение фабрики, чтобы после получить билдер документов.
+            // Получение фабрики, чтобы впоследствии получить билдер документов.
             DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
             // Получили из фабрики билдер, который парсит XML, создает структуру Document в виде иерархического дерева.
@@ -45,8 +45,13 @@ public class XmlDOMParser {
      * @param childTagName  тег, подлежащий изменению
      * @param value         новое значение искомого тега в формате String
      */
-    public void changeTagValue(
-            String fileName, String parentTagName, String parentTagValue, String childTagName, String value, int index) {
+    public void changeTagValue(String fileName,
+                               String parentTagName,
+                               String parentTagValue,
+                               String childTagName,
+                               String value,
+                               int index) {
+
         document.getDocumentElement().normalize();
         if (parentTagValue != null) {
             updateElementValueWithParentValue(parentTagName, parentTagValue, childTagName, value, index);
@@ -66,21 +71,30 @@ public class XmlDOMParser {
      * @param value         новое значение искомого тега в формате String
      * @param index порядковый номер тега, подлежащий изменению
      */
-    private void updateElementValueWithParentValue(
-            String parentTagName, String parentTagValue, String childTagName, String value, int index) {
+    private void updateElementValueWithParentValue(String parentTagName,
+                                                   String parentTagValue,
+                                                   String childTagName,
+                                                   String value,
+                                                   int index) {
 
         getAllNodeElementsByNeighbourTagValue(parentTagName, parentTagValue, childTagName)
                 .item(index).getFirstChild().setNodeValue(value);
     }
 
-    private void updateElementValueWithParentValue(
-            String parentTagName, String parentTagValue, String childTagName, String value) {
+    private void updateElementValueWithParentValue(String parentTagName,
+                                                   String parentTagValue,
+                                                   String childTagName,
+                                                   String value) {
 
         getAllNodeElementsByNeighbourTagValue(parentTagName, parentTagValue, childTagName)
                 .item(0).setNodeValue(value);
     }
 
-    private static void updateElementValueWithParentTag(String parentTagName, String childTagName, String value, int index) {
+    private static void updateElementValueWithParentTag(String parentTagName,
+                                                        String childTagName,
+                                                        String value,
+                                                        int index) {
+
         NodeList nodes = document.getElementsByTagName(parentTagName);
         Element element = null;
 
@@ -91,7 +105,10 @@ public class XmlDOMParser {
         }
     }
 
-    private static void updateElementValueWithParentTag(String parentTagName, String childTagName, String value) {
+    private static void updateElementValueWithParentTag(String parentTagName,
+                                                        String childTagName,
+                                                        String value) {
+
         NodeList nodes = document.getElementsByTagName(parentTagName);
         Element element = null;
 
@@ -109,7 +126,10 @@ public class XmlDOMParser {
      * @param newElementName      имя нового тега
      * @param newElementTextValue значение нового тега в формате String
      */
-    private static void addElement(String parentTagName, String newElementName, String newElementTextValue) {
+    private static void addElement(String parentTagName,
+                                   String newElementName,
+                                   String newElementTextValue) {
+
         NodeList nodes = document.getElementsByTagName(parentTagName);
         Element element = null;
 
@@ -129,30 +149,42 @@ public class XmlDOMParser {
      * @return список значений тегов в формате String
      */
     public ArrayList<String> getListElementsByTagName(String tagName) {
+
         NodeList elements = document.getDocumentElement().getElementsByTagName(tagName);
         return createList(elements);
     }
 
-    public String getStringByNeighbourValue(
-            String neighbourTagName, String neighbourTagValue, String childTagName, int index){
+    public String getStringByNeighbourValue(String neighbourTagName,
+                                            String neighbourTagValue,
+                                            String childTagName,
+                                            int index){
+
         return getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName)
                 .item(index).getTextContent();
     }
 
-    public String getStringByNeighbourValue(
-            String neighbourTagName, String neighbourTagValue, String childTagName){
+    public String getStringByNeighbourValue(String neighbourTagName,
+                                            String neighbourTagValue,
+                                            String childTagName){
+
         return getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName)
                 .item(0).getTextContent();
     }
 
-    public List<String> getListByNeighbourValue(
-            String neighbourTagName, String neighbourTagValue, String childTagName){
+    public List<String> getListByNeighbourValue(String neighbourTagName,
+                                                String neighbourTagValue,
+                                                String childTagName){
+
         NodeList list = getAllNodeElementsByNeighbourTagValue(neighbourTagName, neighbourTagValue, childTagName);
         return createList(list);
     }
 
-    public List<String> getListByNeighbourAttrValue(
-            String neighbourTagName, int attrIndex, String attrName, String attrValue, String childTagName){
+    public List<String> getListByNeighbourAttrValue(String neighbourTagName,
+                                                    int attrIndex,
+                                                    String attrName,
+                                                    String attrValue,
+                                                    String childTagName){
+
         NodeList list = getAllNodeElementsByNeighbourAttrValue(neighbourTagName, attrIndex, attrName, attrValue, childTagName);
         return createList(list);
     }
@@ -174,8 +206,10 @@ public class XmlDOMParser {
      * @param childTagName тег, ноду которого необходимо найти
      * @return список тегов
      */
-    private NodeList getAllNodeElementsByNeighbourTagValue(
-            String neighbourTagName, String neighbourTagValue, String childTagName) {
+    private NodeList getAllNodeElementsByNeighbourTagValue(String neighbourTagName,
+                                                           String neighbourTagValue,
+                                                           String childTagName) {
+
         NodeList nodes = document.getElementsByTagName(neighbourTagName);
         NodeList nodeList = null;
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -195,8 +229,12 @@ public class XmlDOMParser {
      * @param childTagName тег, ноду которого необходимо найти
      * @return список тегов
      */
-    private NodeList getAllNodeElementsByNeighbourAttrValue(
-            String neighbourTagName, int attrIndex, String attrName, String attrValue, String childTagName) {
+    private NodeList getAllNodeElementsByNeighbourAttrValue(String neighbourTagName,
+                                                            int attrIndex,
+                                                            String attrName,
+                                                            String attrValue,
+                                                            String childTagName) {
+
         NodeList nodes = document.getElementsByTagName(neighbourTagName);
         NodeList nodeList = null;
         for (int i = 0; i < nodes.getLength(); i++) {
@@ -210,6 +248,7 @@ public class XmlDOMParser {
     }
 
     private void transformResultIntoFile(String fileName) {
+
         try {
             Transformer transformer = TransformerFactory.newInstance().newTransformer();
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
@@ -220,6 +259,7 @@ public class XmlDOMParser {
     }
 
     private ArrayList<String> createList(NodeList nodeList){
+
         ArrayList<String> arrayList = new ArrayList<>();
         for (int i = 0; i < nodeList.getLength(); i++){
             arrayList.add(nodeList.item(i).getTextContent());
@@ -228,6 +268,7 @@ public class XmlDOMParser {
     }
 
     private NodeList createNodeList(Node node, String childTagName){
+
         Element element = (Element) node;
         NodeList nodeList = null;
         nodeList = element.getElementsByTagName(childTagName);
