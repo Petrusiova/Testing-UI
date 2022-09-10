@@ -7,12 +7,13 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public class CompTechPage extends BasePage {
 
-    @FindBy(xpath = "//legend[contains(text(), 'Производитель')]/..//button")
+    @FindBy(xpath = "//legend[contains(text(), 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ')]/..//button")
     private WebElement allProducers;
 
     @FindBy(xpath = "//*[@id=\"glpricefrom\"]")
@@ -21,22 +22,22 @@ public class CompTechPage extends BasePage {
     @FindBy(xpath = "//*[@id=\"glpriceto\"]")
     private WebElement highestPrice;
 
-    @FindBy(xpath = "//button[contains(text(), 'Показывать по')]/../../..")
+    @FindBy(xpath = "//button[contains(text(), 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ')]/../../..")
     private WebElement showCount;
 
 
-    @Step("Выбираем подкатегорию {0}")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ {0}")
     public void changeCategory(String section) {
         WebElement ourSection = getChromeDriver().findElementByXPath(".//a[text() = '" + section + "']");
         checkElementOnPage(ourSection);
         ourSection.click();
     }
 
-    @Step("Выбираем производителя: {0}")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ: {0}")
     public void changeProducer(String name) {
         checkElementOnPage(allProducers);
         allProducers.click();
-        String fieldXPath = "//legend[contains(text(), \"Производитель\")]/..//input[@type='text']";
+        String fieldXPath = "//legend[contains(text(), \"пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ\")]/..//input[@type='text']";
         try {
             boolean isTextInputDisplayed = !getChromeDriver().findElementByXPath(fieldXPath).isDisplayed();
         } catch (Exception e){
@@ -48,18 +49,18 @@ public class CompTechPage extends BasePage {
         searchField.clear();
         searchField.sendKeys(name);
         WebElement producer = getChromeDriver().findElementByXPath("//span[contains(text(), '" + name + "')]");
-        Assert.assertTrue("Не найден подходящий производитель", producer.isDisplayed());
+        Assert.assertTrue("пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ", producer.isDisplayed());
         producer.click();
     }
 
-    @Step("Снимаем флажок выбора производителя")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void cancelProducer(String name){
         WebElement producer = getChromeDriver().findElementByXPath("//span[text()='" + name + "']");
         checkElementOnPage(producer);
         producer.click();
     }
 
-    @Step("Выбираем минимальную цену")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
     public void changeLowestPrice(String value) {
         checkElementOnPage(lowestPrice);
         lowestPrice.click();
@@ -67,7 +68,7 @@ public class CompTechPage extends BasePage {
         lowestPrice.sendKeys(value);
     }
 
-    @Step("Выбираем максимальную цену")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅ")
     public void changeHighestPrice(String value) {
         checkElementOnPage(highestPrice);
         highestPrice.click();
@@ -75,20 +76,20 @@ public class CompTechPage extends BasePage {
         highestPrice.sendKeys(value);
     }
 
-    @Step("Выбираем количество отображаемых элементов на странице")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void changeShowedCount() {
         checkElementOnPage(showCount);
 //            checkIsInvisible(By.xpath("[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
         clickElement(showCount);
-        String twelve = "//button[contains(text(), 'Показывать по 12')]";
+        String twelve = "//button[contains(text(), 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ 12')]";
         checkElementOnPage(By.xpath(twelve));
         clickElement(getChromeDriver().findElementByXPath(twelve));
     }
 
-    @Step("Выбираем магазины, исключая нежелательные")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void changeShops(List<String> excludedVendors) {
         waitFor(10);
-        By allShops = By.xpath("//legend[contains(text(), 'Магазины')]/..//button");
+        By allShops = By.xpath("//legend[contains(text(), 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ')]/..//button");
         checkElementOnPage(allShops);
         waitFor(10);
         clickElement(getChromeDriver().findElement(allShops));
@@ -99,37 +100,37 @@ public class CompTechPage extends BasePage {
 
     private void scrollElementsAndClick(String xPath, List<String> excludedVendors, ArrayList<String> old) {
         waitFor(8);
-        // Собираем в коллекцию все отображаемые на странице магазины
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         List<WebElement> shopList = getChromeDriver().findElementsByXPath(xPath);
         shopList.forEach(this::checkElementOnPage);
         for (int i = 0; i < excludedVendors.size(); i++) {
             String vendor = excludedVendors.get(i);
             String target = vendor.substring(0, 1);
-            // Все нежелательные магазины из файла теперь с большой буквы (как на странице)
+            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ (пїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ)
             excludedVendors.set(i, vendor.replace(target, target.toUpperCase()));
         }
-        // Собираем все магазины, на которые не нужно кликать: нежелательные + на которые уже кликали
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ + пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         excludedVendors.addAll(old);
         ArrayList<String> unSelected = new ArrayList<>();
-        // Собираем все отображаемые магазины
+        // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
         shopList.forEach(item -> unSelected.add(item.getText()));
 
         if (!old.containsAll(unSelected)) {
             for (WebElement shop : shopList) {
                 if (!excludedVendors.contains(shop.getText()) && shop.isDisplayed()) {
-                    // Кликаем на магазин
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     checkElementOnPage(shop);
                     clickElement(shop);
-                    // Выполняем скроллинг, при котором искомый магазин находится на первой строчке
+                    // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ
                     ((JavascriptExecutor) getChromeDriver()).executeScript("arguments[0].scrollIntoView(true);", shop);
                 }
             }
-            // Перезапускаем метод с новым набором прокликанных магазинов
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             scrollElementsAndClick(xPath, excludedVendors, unSelected);
         }
     }
 
-    @Step("Выбираем рейтинг магазинов")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void changeRating(String rating) {
         getChromeDriver().manage().timeouts().pageLoadTimeout(20, TimeUnit.SECONDS);
         getChromeDriver().manage().timeouts().setScriptTimeout(20, TimeUnit.SECONDS);
@@ -148,7 +149,7 @@ public class CompTechPage extends BasePage {
         clickElement(rating);
     }
 
-    @Step("Выбираем сортировку")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void sortBy(String value) {
         WebElement sort = getChromeDriver().findElementByXPath("//*[contains(text(), '" + value + "')]");
         checkElementOnPage(sort);
@@ -156,11 +157,11 @@ public class CompTechPage extends BasePage {
         sort.click();
     }
 
-    @Step("Выбираем третий элемент на странице")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void chooseThirdElement() {
         waitFor(10);
         checkIsInvisible(By.xpath("//*[@class=\"preloadable__preloader preloadable__preloader_visibility_visible preloadable__paranja\"]"));
-        // Третий элмент
+        // пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ
         By noteBook = By.xpath("//div[3]//h3/a");
         checkElementOnPage(noteBook);
         clickElement(getChromeDriver().findElement(noteBook));
@@ -169,18 +170,18 @@ public class CompTechPage extends BasePage {
         getChromeDriver().switchTo().window(tabs.get(1));
     }
 
-    @Step("Проверяем производителя на соответствие требованиям")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public void validateManufacturer(String manufacturer){
         ArrayList<String> tabs = new ArrayList<>(getChromeDriver().getWindowHandles());
         getChromeDriver().switchTo().window(tabs.get(1));
 
-        Assert.assertTrue("Производитель не соответствует ожидаемому",
-                getChromeDriver().findElement(By.xpath("//h1")).getText().contains("Ноутбук " + manufacturer));
-        // "Характеристики"
-        getChromeDriver().findElement(By.xpath("//span[contains(text(), 'Характеристики')]")).click();
+        Assert.assertTrue("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ",
+                getChromeDriver().findElement(By.xpath("//h1")).getText().contains("пїЅпїЅпїЅпїЅпїЅпїЅпїЅ " + manufacturer));
+        // "пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ"
+        getChromeDriver().findElement(By.xpath("//span[contains(text(), 'пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ')]")).click();
     }
 
-    @Step("Собираем характеристики ноутбука")
+    @Step("пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ")
     public Map<String, String> getChars(String...characts){
         Map<String, String> map = new HashMap<>();
         Arrays.asList(characts).forEach(item -> map.put(item,
